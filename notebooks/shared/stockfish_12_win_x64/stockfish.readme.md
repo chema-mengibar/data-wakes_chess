@@ -1,0 +1,2 @@
+Version:
+stockfish_12_win_x64
