@@ -1,0 +1,11 @@
+[Event "ben_moisa123 vs. Enjuten"]
+[Site "Chess.com"]
+[Date "2021-01-31"]
+[White "ben_moisa123"]
+[Black "Enjuten"]
+[Result "0-1"]
+[WhiteElo "727"]
+[BlackElo "752"]
+[TimeControl "standard"]
+[Termination "Enjuten gewinnt durch Schachmatt"]
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Nc3 d6 5. d3 Be6 6. O-O Ng4 7. Ne2 Be7 8. Ng3 d5 9. exd5 Bxd5 10. Bb3 Bc5 11. Bg5 Bxf2+ 12. Rxf2 f6 13. Be3 Nxe3 14. Qe1 Ng4 15. c4 Be6 16. Nh5 O-O 17. Nf4 Bf5 18. c5+ Kh8 19. Ne6 Bxe6 20. Bxe6 Qxd3 21. Bxg4 Rfd8 22. Rd2 Qg6 23. h3 e4 24. Nh4 Qg5 25. Re2 Qxc5+ 26. Kh1 Ne5 27. Rxe4 Re8 28. Bd7 Nxd7 29. Rxe8+ Rxe8 30. Qxe8+ Nf8 31. Re1 h6 32. Re7 Qc1+ 33. Kh2 Qf4+ 34. g3 Qf2+ 35. Kh1 Qxg3 36. Qxf8+ Kh7 37. Rxg7+ Qxg7 38. Qxg7+ Kxg7 39. Nf3 c5 40. Nd2 b5 41. Nb3 a5 42. Nxc5 f5 43. Ne6+ Kf6 44. Nd4 Ke5 45. Nxb5 f4 46. Nc3 Kd4 47. Ne2+ Ke4 48. Nc3+ Ke3 49. Nd5+ Ke4 50. Nf6+ Ke3 51. Nd5+ Kf3 52. b4 axb4 53. Nxb4 Kg3 54. Kg1 f3 55. Nd3 Kxh3 56. a4 h5 57. a5 h4 58. a6 Kg3 59. a7 h3 60. a8=Q h2+ 61. Kf1 h1=Q# 0-1

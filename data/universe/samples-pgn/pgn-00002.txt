@@ -1,0 +1,11 @@
+[Event "giztom33 vs. Enjuten"]
+[Site "Chess.com"]
+[Date "2021-01-28"]
+[White "giztom33"]
+[Black "Enjuten"]
+[Result "0-1"]
+[WhiteElo "734"]
+[BlackElo "746"]
+[TimeControl "standard"]
+[Termination "Enjuten gewinnt durch Schachmatt"]
+1. d4 d5 2. Nc3 e6 3. Nf3 Nc6 4. Bg5 Be7 5. h4 Bxg5 6. Nxg5 f6 7. Nf3 Nge7 8. g3 e5 9. e4 exd4 10. Nxd4 Ne5 11. Bg2 Ng4 12. exd5 O-O 13. f3 Ne3 14. Qd2 Nxg2+ 15. Qxg2 Qd6 16. Ncb5 Qxd5 17. Nxc7 Qa5+ 18. Qd2 Qxc7 19. Rg1 Qe5+ 20. Kd1 Rd8 21. Re1 Qxg3 22. Rxe7 Qg1+ 23. Re1 Qg6 24. a4 Re8 25. Ra3 Bf5 26. Rae3 Bd7 27. Re4 Rac8 28. h5 Qxh5 29. Rxe8+ Rxe8 30. Nb5 Qxf3+ 31. Re2 Rxe2 32. Qxe2 Qh1+ 33. Kd2 Qd5+ 34. Qd3 Qg2+ 35. Qe2 Qxe2+ 36. Kxe2 a6 37. Na7 Bxa4 38. Kd2 f5 39. b3 Bd7 40. c4 f4 41. Ke2 Bg4+ 42. Kf2 g5 43. b4 Be6 44. c5 g4 45. b5 axb5 46. Nxb5 Bd5 47. Nd6 g3+ 48. Ke1 g2 49. Ne8 g1=Q+ 50. Kd2 f3 51. Nf6+ Kf7 52. Nxd5 Qxc5 53. Ne3 Qd4+ 54. Ke1 Qxe3+ 55. Kf1 Qe2+ 56. Kg1 f2+ 57. Kh2 f1=Q+ 58. Kg3 Qff3+ 59. Kh4 Qh2+ 60. Kg5 Qff4# 0-1
