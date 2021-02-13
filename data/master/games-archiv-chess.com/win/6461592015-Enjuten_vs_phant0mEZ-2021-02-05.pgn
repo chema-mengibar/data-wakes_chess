@@ -1,0 +1,15 @@
+[Event "Live Chess"]
+[Site "Chess.com"]
+[Date "2021.02.05"]
+[Round "-"]
+[White "Enjuten"]
+[Black "phant0mEZ"]
+[Result "1-0"]
+[WhiteElo "777"]
+[BlackElo "773"]
+[TimeControl "900+10"]
+[EndTime "11:03:04 PST"]
+[Termination "Enjuten won - game abandoned"]
+
+1. c4 e5 2. e4 c6 3. Nc3 d5 4. exd5 cxd5 5. cxd5 Nf6 6. d3 Nxd5 7. Nf3 Nxc3 8.
+bxc3 e4 9. Qa4+ Bd7 10. Qxe4+ 1-0

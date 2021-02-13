@@ -1,0 +1,16 @@
+[Event "Live Chess"]
+[Site "Chess.com"]
+[Date "2021.02.04"]
+[Round "-"]
+[White "Enjuten"]
+[Black "1000000VOLTS"]
+[Result "0-1"]
+[WhiteElo "779"]
+[BlackElo "863"]
+[TimeControl "900+10"]
+[EndTime "13:16:05 PST"]
+[Termination "1000000VOLTS won by checkmate"]
+
+1. d4 e6 2. Nc3 Bb4 3. e4 Qh4 4. Nf3 Qxe4+ 5. Be3 Bxc3+ 6. bxc3 f6 7. Nd2 Qc6 8.
+Bc4 d5 9. Bb3 b6 10. a4 Ne7 11. O-O a5 12. Qg4 e5 13. Qxg7 Rg8 14. Qxh7 Qxc3 15.
+dxe5 Qxe5 16. Rfe1 Qe6 17. Qh5+ Kd8 18. Bh6 Qg4 19. Qf7 Qxg2# 0-1

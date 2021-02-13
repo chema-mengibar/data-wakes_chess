@@ -1,0 +1,93 @@
+<html>
+<head>
+<style>
+
+body{
+  font-size: 12px;
+  font-family: Arial;
+}
+
+*{
+  box-sizing: border-box;
+}
+
+.board_row{
+  margin-bottom:30px;
+  border-bottom: 1px solid #ccc;
+}
+
+.board_col-text{
+  margin-top:40px;
+}
+
+.board_col-text h2{
+  margin-bottom:15px;
+}
+
+.board_col-1-2{
+  display:flex;
+  flex-wrap: wrap;
+}
+
+.board_col-1-2 div:first-child {
+  width:100%;
+}
+
+.board_col-1-2 div:last-child {
+  flex:1;
+}
+
+.board_col-4-x{
+  display:flex;
+  flex-wrap: wrap;
+}
+
+.board_col-4-x >*{
+  flex: 1;
+  min-width: 50%;
+  max-width: 50%;
+  border: 1px solid #ccc;
+}
+
+.board_col-4-x svg { 
+  max-width:100%;
+  height: auto;
+}
+
+.board_col-4-x >*:nth-child(odd) {
+  background-color: #dedede;
+}
+
+@media only screen and (min-width: 600px) {
+  .board_col-1-2 div:first-child {
+    border-right: 1px solid #ccc;
+    width:33%;
+  }
+
+  .board_col-4-x >*{
+    min-width: 25%;
+    max-width: 25%;
+  }
+}
+
+.board_col-1-1{
+  display:flex;
+}
+
+.board_col-1-1 >*{
+  flex: 1;
+}
+
+.cell{
+  padding: 10px;
+}
+
+</style>
+<head>
+<body>
+  <div class="board_row">
+    <h1>$title</h1>
+  </div>
+  $rows
+</body>
+<html>

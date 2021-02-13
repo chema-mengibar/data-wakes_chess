@@ -3,6 +3,11 @@
 
 ## Packages
 
+
+### importer jupyter notebooks
+https://github.com/ipython/ipynb
+pip install ipynb
+
 ### python-chess
 https://python-chess.readthedocs.io/en/latest/
 https://pypi.org/project/python-chess  

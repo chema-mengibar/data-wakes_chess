@@ -1,0 +1,19 @@
+[Event "Live Chess"]
+[Site "Chess.com"]
+[Date "2021.02.11"]
+[Round "-"]
+[White "Somu_shinigami"]
+[Black "Enjuten"]
+[Result "1-0"]
+[WhiteElo "810"]
+[BlackElo "753"]
+[TimeControl "900+10"]
+[EndTime "13:42:00 PST"]
+[Termination "Somu_shinigami won by checkmate"]
+
+1. e4 e5 2. Bc4 Nf6 3. Nf3 Nc6 4. Ng5 Qe7 5. O-O Na5 6. Bxf7+ Kd8 7. Na3 Nxe4 8.
+Nxe4 Qxf7 9. Qf3 Qg6 10. b4 Bxb4 11. d3 Rf8 12. Qg3 Qb6 13. Bg5+ Be7 14. Bxe7+
+Kxe7 15. Qxe5+ Kd8 16. Qxg7 Qb4 17. Nc4 Nxc4 18. dxc4 Rf4 19. Qg5+ Qe7 20. Qxf4
+d6 21. Rad1 Qg7 22. Qh4+ Ke8 23. Rde1 Bg4 24. Nf6+ Kf7 25. Nxg4 Re8 26. Rxe8
+Kxe8 27. Re1+ Kf7 28. Qe7+ Kg6 29. Qe6+ Kh5 30. Qf5+ Kh4 31. g3+ Kh3 32. Qh5#
+1-0
