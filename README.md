@@ -1,22 +1,31 @@
 # data-wakes_chess
-explore chess with python and notebooks
+A collection of notebooks to explore and learn chess
 
+## Description
+
+- Explore and learn to use python chess and Stockfish engine
+- Custom Utils
+  - Chess
+  - Engine
+  - Html-report generator
+- Game Review Notebook
 
 ## Install
 
 Download stockfish_20090216_x64.exe 
   in .\notebooks\shared\stockfish_12_win_x64
 
-## Ignores todo
 
-data/*/**
-!data/DATA.md
+## Overview
 
-notebooks/*/**
-!repository/NOTEBOOKS.md
+##### Game Review move-by-move
+![game-review](./docs/screenshots/nb-005_game-report.png)
 
-.idea
 
-secret.*
-!secret.dist.*
+##### Game Report
+Generate a static html output with a minimal responsive layout.
+
+![game-report](./docs/screenshots/nb-005_game-report-output.png)
+
+![game-report](./docs/screenshots/nb-005_game-report-browser.png)
 
