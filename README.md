@@ -27,8 +27,6 @@ Generate a static html output with a minimal responsive layout.
 
 ![game-report](./docs/screenshots/calc-move.gif)
 
-![game-report](./docs/screenshots/nb-005_game-report-output.png)
-
 ![game-report](./docs/screenshots/nb-005_game-report-browser.png)
 
 *Example*: http://motuo.info/chess/reports/lost-6546787425.html
