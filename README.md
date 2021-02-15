@@ -19,13 +19,13 @@ Download stockfish_20090216_x64.exe
 ## Overview
 
 ##### Game Review move-by-move
-![game-review](./docs/screenshots/nb-005_game-report.png)
+![game-report](./docs/screenshots/calc-move.gif)
 
 
 ##### Game Report
 Generate a static html output with a minimal responsive layout.
 
-![game-report](./docs/screenshots/calc-move.gif)
+![game-report](./docs/screenshots/nb-005_game-report-output.png)
 
 ![game-report](./docs/screenshots/nb-005_game-report-browser.png)
 
