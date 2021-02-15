@@ -25,6 +25,8 @@ Download stockfish_20090216_x64.exe
 ##### Game Report
 Generate a static html output with a minimal responsive layout.
 
+![game-report](./docs/screenshots/calc-move.gif)
+
 ![game-report](./docs/screenshots/nb-005_game-report-output.png)
 
 ![game-report](./docs/screenshots/nb-005_game-report-browser.png)
