@@ -1,5 +1,5 @@
 
-# Scroes
+# Scores
 
 ## Pregunta
 
@@ -10,3 +10,9 @@ Now you ask how does the engine get to these numbers? The engine being used is c
 That analysis going 20 plies deep looks like a tree of moves.....and you will hear people talking about a "move tree". The chess engine also has a database of known openings. It also has what is called a hash table, or transposition table. Have you often seen that you can get to the same position with pieces set out on the board in a particular way by more than one sequence of moves? E.g. 1.e4 e5 2. Nf3 Nc6 will look the same as 1.e4 Nc6. 2.Nf3 e5. In order to speed up the calculations and be more efficient the engine stores its evaluations as it computes and if it sees the same pattern like the example above it doesn't need to do a whole new analysis the second time it sees that position...it uses the initial calculation (even though the move sequence was different the end result on the board is the same....so it doesn't need to rethink things out for that position). There are many other settings and maths computations involved. But this is a very very basic idea of how a chess engine works to get to that no. You may also hear people talking about "nodes". A node is a position on the board. Chess engines work so fast they can evaluate many thousands of nodes a second! So they analyse many many positions to get to that figure you see! 
 
 I hope this "short" explanation helps you understand that no you see when the engine gives your move or your opponent's move a score happy.png The other guy was right....there are books on how it all works and the guys who figured these engines out are mathematicians and computer science specialists. It is VERY INVOLVED AND COMPLEX. 
+
+# Move evaluation
+
+- inaccuracy is less than +/- 1.0
+- mistake is greater than +/- 1.0 but less than 2.
+- something and blunder is greater than that.  

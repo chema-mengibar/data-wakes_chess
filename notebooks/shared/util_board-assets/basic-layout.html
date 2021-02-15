@@ -1,23 +1,24 @@
 <html>
 
 <head>
-    <!-- meta name="viewport" content="width=device-width,initial-scale=1" -->
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
     <style>
         .board-body {
-            font-size: 20px;
+            font-size: 14px;
             font-family: Arial;
             padding: 40px 10px;
-            /*color: black;*/
             background-color: #142b44;
             color: white;
+            line-height: 1.4em;
         }
         
         .board-body h1 {
-            font-size: 50px;
+            font-size: 20px;
         }
         
         .board-body h2 {
-            font-size: 40px;
+            font-size: 16px;
         }
         
         .board-body * {
@@ -46,6 +47,11 @@
             width: 100%;
         }
         
+        .board_col-1-2 div:first-child svg {
+            max-width: 100%;
+            height: auto;
+        }
+        
         .board_col-1-2 div:last-child {
             flex: 1;
         }
@@ -61,53 +67,13 @@
             max-width: 50%;
             border: 1px solid #cccccc2e;
             padding-bottom: 20px !important;
+            font-size: 10px;
         }
         
         .board_col-4-x svg {
             max-width: 100%;
             height: auto;
-        }
-        
-        @media only screen and (min-width: 600px) {
-            .board_col-1-2 div:first-child {
-                border-right: 1px solid #cccccc2e;
-                width: 33%;
-            }
-            .board_col-1-2 div:first-child svg {
-                max-width: 100%;
-                height: auto;
-            }
-            .board_col-4-x>* {
-                min-width: 33%;
-                max-width: 33%;
-            }
-            .board-body h1 {
-                font-size: 50px;
-            }
-            .board-body h2 {
-                font-size: 40px;
-            }
-            .board-body {
-                font-size: 18px;
-                /*color: green;*/
-            }
-        }
-        
-        @media only screen and (min-width: 1024px) {
-            .board-body h1 {
-                font-size: 30px;
-            }
-            .board-body h2 {
-                font-size: 24px;
-            }
-            .board-body {
-                font-size: 12px;
-                /*color: red;*/
-            }
-            .board_col-4-x>* {
-                min-width: 20%;
-                max-width: 20%;
-            }
+            margin-bottom: 7px;
         }
         
         .board_col-1-1 {
@@ -120,6 +86,17 @@
         
         .cell {
             padding: 10px;
+        }
+        
+        @media (min-width: 768px) {
+            .board_col-4-x>* {
+                min-width: 25%;
+                max-width: 25%;
+            }
+            .board_col-1-2 div:first-child {
+                border-right: 1px solid #cccccc2e;
+                width: 33%;
+            }
         }
     </style>
     <title>$title</title>
