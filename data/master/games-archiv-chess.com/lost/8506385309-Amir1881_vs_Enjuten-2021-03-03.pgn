@@ -1,0 +1,15 @@
+[Event "Live Chess"]
+[Site "Chess.com"]
+[Date "2021.03.03"]
+[Round "-"]
+[White "Amir1881"]
+[Black "Enjuten"]
+[Result "1-0"]
+[WhiteElo "811"]
+[BlackElo "779"]
+[TimeControl "900+10"]
+[EndTime "2:30:45 PST"]
+[Termination "Amir1881 won by checkmate"]
+
+1. e4 e5 2. Bc4 Nh6 3. Qf3 Nc6 4. Nc3 f6 5. d3 d6 6. Bxh6 gxh6 7. Qh5+ Ke7 8.
+Qf7# 1-0

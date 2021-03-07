@@ -1,0 +1,18 @@
+[Event "Live Chess"]
+[Site "Chess.com"]
+[Date "2021.03.01"]
+[Round "-"]
+[White "TrumpCoup"]
+[Black "Enjuten"]
+[Result "0-1"]
+[WhiteElo "884"]
+[BlackElo "779"]
+[TimeControl "900+10"]
+[EndTime "14:25:22 PST"]
+[Termination "Enjuten won by checkmate"]
+
+1. d4 d5 2. Bf4 Bf5 3. Nc3 e6 4. e3 f6 5. Nf3 g5 6. Bg3 Ne7 7. Bd3 c6 8. e4 Bg4
+9. h3 Bh5 10. Qd2 Nd7 11. O-O e5 12. Rfe1 g4 13. hxg4 Bxg4 14. exd5 cxd5 15.
+dxe5 Bg7 16. Nxd5 Nxd5 17. exf6+ Kf7 18. fxg7 Rg8 19. Bh4 Qc7 20. Ng5+ Kxg7 21.
+Ne6+ Bxe6 22. Rxe6 Nf4 23. Re7+ Kf8 24. g3 Nh3+ 25. Kf1 Qc6 26. Qh6+ Qxh6 27.
+Rae1 Qd2 28. R1e2 Qd1+ 29. Kg2 Qg1+ 30. Kxh3 Qh1# 0-1

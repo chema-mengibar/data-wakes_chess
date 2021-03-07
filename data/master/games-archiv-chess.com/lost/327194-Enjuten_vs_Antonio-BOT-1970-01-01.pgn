@@ -1,0 +1,17 @@
+[Event "vs Computer"]
+[Site "Chess.com"]
+[Date ""]
+[Round "-"]
+[White "Enjuten"]
+[Black "Antonio-BOT"]
+[Result "0-1"]
+[WhiteElo "787"]
+[BlackElo "1500"]
+[TimeControl "1/0"]
+[EndDate "2021.03.01"]
+[Termination "Antonio-BOT won by checkmate"]
+
+1. e4 e5 2. Nf3 Nc6 3. c4 Qf6 4. g3 Nd4 5. Bg2 Bc5 6. a3 b5 7. b4 Be7 8. d3 bxc4
+9. dxc4 a5 10. b5 Bb7 11. Be3 Bxe4 12. Nc3 Bxf3 13. Bxf3 Nxf3+ 14. Ke2 Qf5 15.
+Qd5 c6 16. bxc6 Nd4+ 17. Bxd4 d6 18. Nb5 Nf6 19. Nc7+ Kd8 20. Qxf7 Kxc7 21.
+Qxe7+ Kxc6 22. Rab1 Qc2+ 23. Ke3 exd4+ 24. Kxd4 Qd2# 0-1
