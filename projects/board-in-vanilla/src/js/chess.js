@@ -50,6 +50,7 @@ export default class Chess {
         // Init
         this.config = {
             asIcon: ('asIcon' in config) ? config.asIcon : true,
+            asLines: ('asLines' in config) ? config.asLines : true,
         }
 
         this.figures = figures;
@@ -66,6 +67,10 @@ export default class Chess {
 
         this.printBoardHtml().then(
             response => {
+                if (this.config.asLines) {
+
+                    document.getElementById("chess0").classList.add('asLines')
+                }
                 document.getElementById("chess0").innerHTML = response;
                 this.paintArtist();
             }
@@ -82,10 +87,11 @@ export default class Chess {
         }
 
         const allowedLetters = ['r', 'n', 'b', 'k', 'q', 'p', 'R', 'N', 'B', 'K', 'Q', 'P'];
-        const fenRowsSeparator = ' ';
+        const fenFiguresSeparator = ' ';
+        const fenRowsSeparator = '/';
 
-        const figuresPart = fen.split(fenRowsSeparator)[0];
-        const strRows = figuresPart.split('/');
+        const figuresPart = fen.split(fenFiguresSeparator)[0];
+        const strRows = figuresPart.split(fenRowsSeparator);
 
         strRows.forEach((rowText, rowIdw) => {
             const boardRowIdx = 8 - rowIdw; // to flip the board ->  rowIdw + 1
@@ -195,18 +201,15 @@ export default class Chess {
         //     document.getElementById(cellKey).style.backgroundColor = color ? 'white' : 'green';
         //     color = !color;
         // })
-
     }
 
     paintArtist() {
         // document.getElementById('e4').classList.add('with-move-last');
         // document.getElementById('f3').classList.add('with-move-last');
 
-        // document.getElementById('e4').classList.add('with-move-ok');
         // document.getElementById('f5').classList.add('with-move-ok');
 
-        // document.getElementById('a1').classList.add('with-move-error');
-        // document.getElementById('a4').classList.add('with-move-error');
+        // document.getElementById('f8').classList.add('with-move-error');
 
         // document.getElementById('d5').classList.add('with-domain-white');
         // document.getElementById('d7').classList.add('with-domain-black');
@@ -215,7 +218,7 @@ export default class Chess {
         // document.getElementById('d6').classList.add('with-accent-black');
 
         // document.getElementById('e3').classList.add('with-anotation')
-        // document.getElementById('e3').setAttribute('data-anotation', '2');
+        // document.getElementById('e3').setAttribute('data-anotation', '!?');
 
 
         // const cellsd5 = this.getOptionfromCell('d5');
@@ -239,6 +242,8 @@ export default class Chess {
             ...this.getOptionfromCell('g4'),
             ...this.getOptionfromCell('e6'),
             ...this.getOptionfromCell('f2'),
+            ...this.getOptionfromCell('e5'),
+            ...this.getOptionfromCell('d4'),
         ];
 
         cellsW.forEach(cellKey => {
@@ -273,7 +278,7 @@ export default class Chess {
 
         console.log(letter, cellCol, cellRow);
 
-        if (letter === 'r') {
+        if (letter === 'r' || letter === 'q') {
             for (let y = cellRow - 1; y >= 1; y--) {
                 options.push(this.getCellKey(cellCol, y));
             }
@@ -287,7 +292,8 @@ export default class Chess {
                 options.push(this.getCellKey(cols[x], cellRow));
             }
 
-        } else if (letter === 'n') {
+        }
+        if (letter === 'n') {
             const nCombisYX = [
                 [2, 1],
                 [1, 2],
@@ -297,15 +303,16 @@ export default class Chess {
                 [-1, -2],
                 [1, -2],
                 [2, -1],
-            ]
+            ];
             nCombisYX.forEach((yx) => {
                 const y = cellRow + yx[0];
                 const x = currentColIdx + yx[1];
                 if (x >= 0 && x < cols.length && y > 0 && y <= 8) {
-                    options.push(this.getCellKey(cols[x], y))
+                    options.push(this.getCellKey(cols[x], y));
                 }
             })
-        } else if (letter === 'p') {
+        }
+        if (letter === 'p') {
 
             const cellY = color ? cellRow + 1 : cellRow - 1;
             const pCombis = [
@@ -316,13 +323,56 @@ export default class Chess {
                 const x = currentColIdx + xy[0];
                 const y = xy[1];
                 if (x >= 0 && x < cols.length && y > 0 && y <= 8) {
-                    options.push(this.getCellKey(cols[x], y))
+                    options.push(this.getCellKey(cols[x], y));
                 }
             });
 
-        } else if (letter === 'b') {
-            // todo
-        } else if (letter === 'k') {
+        }
+        if (letter === 'b' || letter === 'q') {
+            let xInc = 1;
+            for (let y = cellRow - 1; y >= 0; y--) {
+                const x = currentColIdx + xInc;
+                if (x >= 0 && x < cols.length && y > 0 && y <= 8) {
+                    const targetSquare = this.getCellKey(cols[x], y);
+                    options.push(targetSquare)
+                    xInc++;
+                    if (!this.mapCells.get(targetSquare)) {
+                        break;
+                    }
+                }
+            }
+            xInc = 1;
+            for (let y = cellRow - 1; y >= 0; y--) {
+                const x = currentColIdx - xInc;
+                if (x >= 0 && x < cols.length && y > 0 && y <= 8) {
+                    const targetSquare = this.getCellKey(cols[x], y);
+                    options.push(this.getCellKey(cols[x], y))
+                    xInc++;
+                    if (!this.mapCells.get(targetSquare)) {
+                        // not break hear, next square
+                        // break;
+                    }
+
+                }
+            }
+            xInc = 1;
+            for (let y = cellRow + 1; y <= 8; y++) {
+                const x = currentColIdx - xInc;
+                if (x >= 0 && x < cols.length && y > 0 && y <= 8) {
+                    options.push(this.getCellKey(cols[x], y))
+                    xInc++;
+                }
+            }
+            xInc = 1;
+            for (let y = cellRow + 1; y <= 8; y++) {
+                const x = currentColIdx + xInc;
+                if (x >= 0 && x < cols.length && y > 0 && y <= 8) {
+                    options.push(this.getCellKey(cols[x], y))
+                    xInc++;
+                }
+            }
+        }
+        if (letter === 'k') {
             const kCombisXY = [
                 [-1, 0],
                 [-1, 1],
@@ -332,18 +382,14 @@ export default class Chess {
                 [1, -1],
                 [0, -1],
                 [-1, -1],
-
-            ]
+            ];
             kCombisXY.forEach((xy) => {
                 const x = currentColIdx + xy[0];
                 const y = cellRow + xy[1];
                 if (x >= 0 && x < cols.length && y > 0 && y <= 8) {
                     options.push(this.getCellKey(cols[x], y))
                 }
-            })
-        } else if (letter === 'q') {
-            // todo
-
+            });
         }
         return options;
     }

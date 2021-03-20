@@ -2,48 +2,25 @@
     /* Default cells bg */
     --color-default-cell-white: #fff;
     --color-default-cell-black: #ccc;
+    --color-default-cell-line: grey;
     /* Anotation cell */
     --color-anotation-color: black;
-    --color-anotation-bg: #f7ba05;
     /* Last move bg */
-    --color-move-last-hex: #FFA935;
-    --color-move-last-rgb: 255, 169, 53;
+    --color-move-last: #000;
     /* Right move bg */
-    --color-move-ok-hex: #53FA74;
-    --color-move-ok-rgb: 83, 250, 116;
+    --color-move-ok: #00C627;
     /* Wrong move bg */
-    --color-move-error-hex: #FA2A3F;
-    --color-move-error-rgb: 250, 42, 63;
+    --color-move-error: #FA2A3F;
     /* Figures black*/
-    --color-figure-black-hex: #9227EB;
-    --color-figure-black-rgb: 146, 39, 235;
+    --color-figure-black-color: #e37038;
+    --color-figure-black-bg: #f79b6463;
     /* Figures white*/
-    --color-figure-white-hex: #09B9E0;
-    --color-figure-white-rgb: 9, 185, 224;
+    --color-figure-white-color: #057993;
+    --color-figure-white-bg: #6499ff6b;
     /*
     Usage:
     background-color: rgba(var(--color), 0.8); 
     */
-    /* Long line*/
-    --long-l: 14px;
-    --long-vh: 18px;
-    /* Rotation deegres line*/
-    --rotation-top: 180deg;
-    --rotation-right: 270deg;
-    --rotation-bottom: 0;
-    --rotation-left: 90deg;
-    --rotation-diagonal-top-left: 133deg;
-    --rotation-diagonal-top-right: 225deg;
-    --rotation-diagonal-bottom-left: 45deg;
-    --rotation-diagonal-bottom-right: 315deg;
-    --rotation-knight-clock-1: 205deg;
-    --rotation-knight-clock-2: 245deg;
-    --rotation-knight-clock-4: 300deg;
-    --rotation-knight-clock-5: 333deg;
-    --rotation-knight-clock-7: 385deg;
-    --rotation-knight-clock-8: 424deg;
-    --rotation-knight-clock-10: 476deg;
-    --rotation-knight-clock-11: 513deg;
 }
 
 div.chess {
@@ -64,25 +41,43 @@ div.chess {
     text-align: center;
     position: relative;
     z-index: 1;
+    box-sizing: border-box;
+    background-color: var(--color-default-cell-white);
 }
 
 
 /* Basic chess grid */
 
-.chess-row:nth-child(even) .chess-square:nth-child(even) {
+.chess:not(.asLines) .chess-row:nth-child(even) .chess-square:nth-child(even) {
     background-color: var(--color-default-cell-white);
 }
 
-.chess-row:nth-child(even) .chess-square:nth-child(odd) {
+.chess:not(.asLines) .chess-row:nth-child(even) .chess-square:nth-child(odd) {
     background-color: var(--color-default-cell-black);
 }
 
-.chess-row:nth-child(odd) .chess-square:nth-child(odd) {
+.chess:not(.asLines) .chess-row:nth-child(odd) .chess-square:nth-child(odd) {
     background-color: var(--color-default-cell-white);
 }
 
-.chess-row:nth-child(odd) .chess-square:nth-child(even) {
+.chess:not(.asLines) .chess-row:nth-child(odd) .chess-square:nth-child(even) {
     background-color: var(--color-default-cell-black);
+}
+
+.chess.asLines .chess-row {
+    border-top: 1px solid var(--color-default-cell-line);
+}
+
+.chess.asLines .chess-row:last-child {
+    border-bottom: 1px solid var(--color-default-cell-line);
+}
+
+.chess.asLines .chess-row .chess-square {
+    border-left: 1px solid var(--color-default-cell-line);
+}
+
+.chess.asLines .chess-row .chess-square:last-child {
+    border-right: 1px solid var(--color-default-cell-line);
 }
 
 
@@ -99,44 +94,44 @@ div.chess {
 }
 
 .chess-square.as-text-white {
-    color: var(--color-figure-white-hex);
+    color: var(--color-figure-white-color);
 }
 
 .chess-square.as-text-black {
-    color: var(--color-figure-black-hex);
-}
-
-.chess .chess-row .chess-square.with-move-last::before {
-    background: rgba(var(--color-move-last-rgb), .8);
-}
-
-.chess .chess-row .chess-square.with-move-ok::before {
-    background: rgba(var(--color-move-ok-rgb), .8);
-}
-
-.chess .chess-row .chess-square.with-move-error::before {
-    background: rgba(var(--color-move-error-rgb), .8);
+    color: var(--color-figure-black-color);
 }
 
 .chess .chess-row .chess-square.with-domain-white::after {
-    background: rgba(var(--color-figure-white-rgb), .5);
+    background: var(--color-figure-white-bg);
 }
 
 .chess .chess-row .chess-square.with-domain-black::before {
-    background: rgba(var(--color-figure-black-rgb), .5);
+    background: var(--color-figure-black-bg);
 }
 
 .chess .chess-row .chess-square.with-accent-white::after {
-    background: rgba(var(--color-figure-white-rgb), .7);
+    border: 2px solid var(--color-figure-white-color);
 }
 
 .chess .chess-row .chess-square.with-accent-black::before {
-    background: rgba(var(--color-figure-black-rgb), .7);
+    border: 2px solid var(--color-figure-black-color);
+}
+
+.chess .chess-row .chess-square.with-move-last::before {
+    border: 2px dashed var(--color-move-last);
+}
+
+.chess .chess-row .chess-square.with-move-ok::before {
+    border: 3px dashed var(--color-move-ok);
+}
+
+.chess .chess-row .chess-square.with-move-error::after {
+    border: 3px dashed var(--color-move-error);
 }
 
 .with-move-last::before,
 .with-move-ok::before,
-.with-move-error::before,
+.with-move-error::after,
 .with-domain-white::after,
 .with-domain-black::before,
 .with-accent-white::after,
@@ -149,22 +144,15 @@ div.chess {
     top: 0;
     left: 0;
     z-index: -1;
-    mix-blend-mode: hard-light;
+    mix-blend-mode: inherit;
+    box-sizing: border-box;
 }
 
 .with-anotation::after {
     content: attr(data-anotation);
-    display: block;
-    width: auto;
-    height: auto;
-    z-index: 1;
-    position: absolute;
-    right: 1px;
-    top: 1px;
-    font-size: 5px;
+    font-size: 7px;
     line-height: 5px;
     text-align: right;
     color: var(--color-anotation-color);
-    background-color: var(--color-anotation-bg);
     padding: 1px;
 }
