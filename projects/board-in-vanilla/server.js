@@ -2,7 +2,9 @@ const http = require("http")
 const url = require("url")
 const path = require("path")
 const fs = require("fs")
-constport = process.argv[2] || 8888
+
+const port = process.argv[2] || 3001
+
 const mimeTypes = {
     "html": "text/html",
     "jpeg": "image/jpeg",
@@ -14,10 +16,12 @@ const mimeTypes = {
     "css": "text/css"
 };
 
+const sourceDir = 'src';
+
 http.createServer(function(request, response) {
 
-    const uri = url.parse(request.url).pathname
-    let filename = path.join(process.cwd(), uri);
+    const uri = url.parse(request.url).pathname;
+    let filename = path.join(process.cwd(), sourceDir, uri);
 
     fs.exists(filename, function(exists) {
         if (!exists) {
@@ -38,7 +42,7 @@ http.createServer(function(request, response) {
                 return;
             }
 
-            var mimeType = mimeTypes[filename.split('.').pop()];
+            let mimeType = mimeTypes[filename.split('.').pop()];
 
             if (!mimeType) {
                 mimeType = 'text/plain';
@@ -49,4 +53,4 @@ http.createServer(function(request, response) {
             response.end();
         });
     });
-}).listen(3001);
+}).listen(port);

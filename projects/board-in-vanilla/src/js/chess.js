@@ -1,48 +1,6 @@
-class Figure {
-    constructor(config) {
-        this.letterW = config.letterW
-        this.iconW = config.iconW;
-        this.letterB = config.letterB;
-        this.iconB = config.iconB;
-    }
-
-    asLetter(color = true) {
-        if (color) {
-            return this.letterW;
-        }
-        return this.letterB;
-    }
-
-    asIcon(color = true) {
-        if (color) {
-            return this.iconW;
-        }
-        return this.iconB;
-    }
-}
-
-
-const rows = [8, 7, 6, 5, 4, 3, 2, 1];
-const cols = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-
-const fenBase = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
-
-const figures = {
-    b: new Figure({ letterW: 'B', iconW: '♗', letterB: 'b', iconB: '♝' }),
-    r: new Figure({ letterW: 'R', iconW: '♖', letterB: 'r', iconB: '♜' }),
-    n: new Figure({ letterW: 'N', iconW: '♘', letterB: 'n', iconB: '♞' }),
-    k: new Figure({ letterW: 'K', iconW: '♔', letterB: 'k', iconB: '♚' }),
-    q: new Figure({ letterW: 'Q', iconW: '♕', letterB: 'q', iconB: '♛' }),
-    p: new Figure({ letterW: 'P', iconW: '♙', letterB: 'p', iconB: '♟' }),
-};
-
-const flankQ = ['a', 'b', 'c', 'd', ];
-const flankK = ['e', 'f', 'g', 'h', ];
-
-const white = true;
-const black = false;
-
-
+import { rows, cols, fenBase, flankQ, flankK, white, black, figures } from './chess/chess-const.js';
+import Utils from './chess/chess-utils.js';
+import Squares from './chess/chess-squares.js';
 
 export default class Chess {
 
@@ -60,108 +18,50 @@ export default class Chess {
         };
 
         // Run
-        this.mapCells = this.createCellsMap();
+        this.mapCells = Utils.createCellsMap(rows, cols);
 
         const fenStr = ('fen' in config) ? config.fen : fenBase;
-        this.fenParser(fenStr);
+        this.fenToMap(fenStr);
 
         this.printBoardHtml().then(
             response => {
                 if (this.config.asLines) {
-
-                    document.getElementById("chess0").classList.add('asLines')
+                    document.getElementById("chess0").classList.add('asLines');
                 }
                 document.getElementById("chess0").innerHTML = response;
                 this.paintArtist();
             }
         )
-
-
     }
 
 
-    fenParser(fen) {
-
+    fenToMap(fen) {
         if (!fen || fen === '') {
             return
         }
-
-        const allowedLetters = ['r', 'n', 'b', 'k', 'q', 'p', 'R', 'N', 'B', 'K', 'Q', 'P'];
-        const fenFiguresSeparator = ' ';
-        const fenRowsSeparator = '/';
-
-        const figuresPart = fen.split(fenFiguresSeparator)[0];
-        const strRows = figuresPart.split(fenRowsSeparator);
-
-        strRows.forEach((rowText, rowIdw) => {
-            const boardRowIdx = 8 - rowIdw; // to flip the board ->  rowIdw + 1
-            let currentCol = 1;
-            rowText.split('').forEach((character) => {
-                if (allowedLetters.includes(character)) {
-                    // it´s a figure letter
-                    const colLetter = cols[currentCol - 1];
-                    const cellKey = this.getCellKey(colLetter, boardRowIdx);
-                    const color = (character == character.toUpperCase()); // R -> true
-                    const figureLetter = character.toLowerCase();
-                    this.setFigureInCell(cellKey, figureLetter, color);
-                    currentCol += 1;
-
-                } else {
-                    // should be a number
-                    const jumpCols = parseInt(character, 10)
-                    for (let c = currentCol; c < jumpCols + currentCol; c++) {
-                        const colLetter = cols[c - 1];
-                        const cellKey = this.getCellKey(colLetter, boardRowIdx);
-                        this.setFigureInCell(cellKey, null);
-                    }
-                    currentCol += parseInt(character, 10);
-                }
-            })
-        });
-
-
-
+        const fenAsObj = Utils.parseFenStrToObject(fen)
+        this.mapCells = new Map(Object.entries(fenAsObj));
     }
 
-    getCellKey(colLetter, rowNumber) {
-        return `${colLetter}${rowNumber}`;
-    }
 
     setFigureInCell(cellKey, letter, color = white) {
-        if (letter) {
-            this.mapCells.set(cellKey, {
-                letter: letter,
-                color: color,
-            });
-        } else {
-            this.mapCells.set(cellKey, null);
-        }
-
+        this.mapCells.set(cellKey, Utils.asSquare(letter, color));
     }
 
-    createCellsMap() {
-        const listCells = [];
-        rows.forEach((row) => {
-            cols.forEach((col) => {
-                const cellKey = this.getCellKey(col, row);
-                listCells.push([cellKey, null]);
-            })
-        })
-        return new Map(listCells);
-    }
 
     async printBoardHtml() {
         let htmlTable = '';
         rows.forEach((row) => {
             let htmlRow = `<div class="chess-row" data-row="${row}">`;
             cols.forEach((col) => {
-                const cellKey = this.getCellKey(col, row);
-                const cellFigure = this.mapCells.get(cellKey);
+                const squareName = Utils.getCellKey(col, row);
+                const cellFigure = this.mapCells.get(squareName);
+
                 let figureText = ' ';
                 const cssClasses = [];
                 if (cellFigure) {
 
-                    const selectedFigure = this.figures[cellFigure.letter];
+                    const selectedFigure = figures[cellFigure.letter];
                     if (this.config.asIcon === true) {
                         figureText = selectedFigure.asIcon(cellFigure.color);
                     } else {
@@ -178,7 +78,7 @@ export default class Chess {
                         cssClasses.push('as-text-black');
                     }
                 }
-                const htmlCol = `<div id="${cellKey}" title="${cellKey}" class="chess-square ${  cssClasses.join(' ') }" data-col="${col}" data-square="${cellKey}">${figureText}</div>`;
+                const htmlCol = `<div id="${squareName}" title="${squareName}" class="chess-square ${  cssClasses.join(' ') }" data-col="${col}" data-square="${squareName}">${figureText}</div>`;
                 htmlRow += htmlCol;
             })
             htmlRow += '</div>';
@@ -263,136 +163,47 @@ export default class Chess {
         cellsB.forEach(cellKey => {
             document.getElementById(cellKey).classList.add('with-domain-black');
         })
-
-
     }
 
-    getOptionfromCell(cellKey) {
+
+    getOptionfromCell(squareName) {
 
         const options = [];
-        const cellKeyProps = cellKey.split('');
-        const cellCol = cellKeyProps[0];
-        const cellRow = parseInt(cellKeyProps[1], 10);
-        const { letter, color } = this.mapCells.get(cellKey); // letter, color
-        const currentColIdx = cols.indexOf(cellCol);
+        const squareNameParts = squareName.split('');
 
-        console.log(letter, cellCol, cellRow);
+        const squareColumnLetter = squareNameParts[0];
+        const squareRowNumber = parseInt(squareNameParts[1], 10);
 
-        if (letter === 'r' || letter === 'q') {
-            for (let y = cellRow - 1; y >= 1; y--) {
-                options.push(this.getCellKey(cellCol, y));
-            }
-            for (let y = cellRow + 1; y <= 8; y++) {
-                options.push(this.getCellKey(cellCol, y));
-            }
-            for (let x = currentColIdx + 1; x < cols.length; x++) {
-                options.push(this.getCellKey(cols[x], cellRow));
-            }
-            for (let x = currentColIdx - 1; x >= 0; x--) {
-                options.push(this.getCellKey(cols[x], cellRow));
-            }
+        const { letter, color } = this.mapCells.get(squareName); // letter, color
 
+        if (letter === 'r') {
+            const squareOptions = Squares.getSquaresOptionsFromSquareWithR(squareColumnLetter, squareRowNumber);
+            options.push(...squareOptions);
         }
         if (letter === 'n') {
-            const nCombisYX = [
-                [2, 1],
-                [1, 2],
-                [-1, 2],
-                [-2, 1],
-                [-2, -1],
-                [-1, -2],
-                [1, -2],
-                [2, -1],
-            ];
-            nCombisYX.forEach((yx) => {
-                const y = cellRow + yx[0];
-                const x = currentColIdx + yx[1];
-                if (x >= 0 && x < cols.length && y > 0 && y <= 8) {
-                    options.push(this.getCellKey(cols[x], y));
-                }
-            })
+            const squareOptions = Squares.getSquaresOptionsFromSquareWithN(squareColumnLetter, squareRowNumber);
+            options.push(...squareOptions);
         }
         if (letter === 'p') {
-
-            const cellY = color ? cellRow + 1 : cellRow - 1;
-            const pCombis = [
-                [1, cellY],
-                [-1, cellY]
-            ];
-            pCombis.forEach((xy) => {
-                const x = currentColIdx + xy[0];
-                const y = xy[1];
-                if (x >= 0 && x < cols.length && y > 0 && y <= 8) {
-                    options.push(this.getCellKey(cols[x], y));
-                }
-            });
-
+            const squareOptions = Squares.getSquaresOptionsFromSquareWithP(squareColumnLetter, squareRowNumber, color);
+            options.push(...squareOptions);
         }
-        if (letter === 'b' || letter === 'q') {
-            let xInc = 1;
-            for (let y = cellRow - 1; y >= 0; y--) {
-                const x = currentColIdx + xInc;
-                if (x >= 0 && x < cols.length && y > 0 && y <= 8) {
-                    const targetSquare = this.getCellKey(cols[x], y);
-                    options.push(targetSquare)
-                    xInc++;
-                    if (!this.mapCells.get(targetSquare)) {
-                        break;
-                    }
-                }
-            }
-            xInc = 1;
-            for (let y = cellRow - 1; y >= 0; y--) {
-                const x = currentColIdx - xInc;
-                if (x >= 0 && x < cols.length && y > 0 && y <= 8) {
-                    const targetSquare = this.getCellKey(cols[x], y);
-                    options.push(this.getCellKey(cols[x], y))
-                    xInc++;
-                    if (!this.mapCells.get(targetSquare)) {
-                        // not break hear, next square
-                        // break;
-                    }
-
-                }
-            }
-            xInc = 1;
-            for (let y = cellRow + 1; y <= 8; y++) {
-                const x = currentColIdx - xInc;
-                if (x >= 0 && x < cols.length && y > 0 && y <= 8) {
-                    options.push(this.getCellKey(cols[x], y))
-                    xInc++;
-                }
-            }
-            xInc = 1;
-            for (let y = cellRow + 1; y <= 8; y++) {
-                const x = currentColIdx + xInc;
-                if (x >= 0 && x < cols.length && y > 0 && y <= 8) {
-                    options.push(this.getCellKey(cols[x], y))
-                    xInc++;
-                }
-            }
+        if (letter === 'b') {
+            const squareOptions = Squares.getSquaresOptionsFromSquareWithB(squareColumnLetter, squareRowNumber);
+            options.push(...squareOptions);
+        }
+        if (letter === 'q') {
+            const squareOptionsVertHorz = Squares.getSquaresOptionsFromSquareWithR(squareColumnLetter, squareRowNumber);
+            const squareOptionsDiagonal = Squares.getSquaresOptionsFromSquareWithB(squareColumnLetter, squareRowNumber);
+            options.push(...squareOptionsVertHorz, ...squareOptionsDiagonal);
         }
         if (letter === 'k') {
-            const kCombisXY = [
-                [-1, 0],
-                [-1, 1],
-                [0, 1],
-                [1, 1],
-                [1, 0],
-                [1, -1],
-                [0, -1],
-                [-1, -1],
-            ];
-            kCombisXY.forEach((xy) => {
-                const x = currentColIdx + xy[0];
-                const y = cellRow + xy[1];
-                if (x >= 0 && x < cols.length && y > 0 && y <= 8) {
-                    options.push(this.getCellKey(cols[x], y))
-                }
-            });
+            const squareOptions = Squares.getSquaresOptionsFromSquareWithK(squareColumnLetter, squareRowNumber);
+            options.push(...squareOptions);
         }
         return options;
     }
+
 
     analyzeCountFiguresInFlank(targetColor = white, targetFlankLetter = 'k') {
 
