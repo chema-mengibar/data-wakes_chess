@@ -3,22 +3,40 @@ import Utils from './chess-utils.js';
 
 
 function getSquaresOptionsFromSquareWithR(
+    squaresMap,
     squareColumLetter,
-    squareRowNumber
+    squareRowNumber,
+    limitation = false
 ) {
     const currentColumnIdx = cols.indexOf(squareColumLetter);
     const squares = [];
     for (let y = squareRowNumber - 1; y >= 1; y--) {
         squares.push(Utils.getCellKey(squareColumLetter, y));
+        const lastSquare = squares[squares.length - 1];
+        if (squaresMap.get(lastSquare) && limitation) {
+            break;
+        }
     }
     for (let y = squareRowNumber + 1; y <= 8; y++) {
         squares.push(Utils.getCellKey(squareColumLetter, y));
+        const lastSquare = squares[squares.length - 1];
+        if (squaresMap.get(lastSquare) && limitation) {
+            break;
+        }
     }
     for (let x = currentColumnIdx + 1; x < cols.length; x++) {
         squares.push(Utils.getCellKey(cols[x], squareRowNumber));
+        const lastSquare = squares[squares.length - 1];
+        if (squaresMap.get(lastSquare) && limitation) {
+            break;
+        }
     }
     for (let x = currentColumnIdx - 1; x >= 0; x--) {
         squares.push(Utils.getCellKey(cols[x], squareRowNumber));
+        const lastSquare = squares[squares.length - 1];
+        if (squaresMap.get(lastSquare) && limitation) {
+            break;
+        }
     }
     return squares;
 }
@@ -75,50 +93,65 @@ function getSquaresOptionsFromSquareWithP(
 
 
 function getSquaresOptionsFromSquareWithB(
+    squaresMap,
     squareColumLetter,
     squareRowNumber,
+    limitation = false
 ) {
     const currentColumnIdx = cols.indexOf(squareColumLetter);
     const squares = [];
+
     let xInc = 1;
     for (let y = squareRowNumber - 1; y >= 0; y--) {
         const x = currentColumnIdx + xInc;
         if (x >= 0 && x < cols.length && y > 0 && y <= 8) {
-            const targetSquare = Utils.getCellKey(cols[x], y);
-            squares.push(targetSquare)
+
+            squares.push(Utils.getCellKey(cols[x], y))
             xInc++;
-            // if (!this.mapCells.get(targetSquare)) {
-            //     break;
-            // }
+            const lastSquare = squares[squares.length - 1];
+            if (squaresMap.get(lastSquare) && limitation) {
+                break;
+            }
         }
     }
+
     xInc = 1;
     for (let y = squareRowNumber - 1; y >= 0; y--) {
         const x = currentColumnIdx - xInc;
         if (x >= 0 && x < cols.length && y > 0 && y <= 8) {
-            const targetSquare = Utils.getCellKey(cols[x], y);
             squares.push(Utils.getCellKey(cols[x], y))
             xInc++;
-            // if (!this.mapCells.get(targetSquare)) {
-            //     // not break hear, next square
-            //     // break;
-            // }
+            const lastSquare = squares[squares.length - 1];
+            if (squaresMap.get(lastSquare) && limitation) {
+                break;
+            }
         }
     }
+
     xInc = 1;
     for (let y = squareRowNumber + 1; y <= 8; y++) {
         const x = currentColumnIdx - xInc;
         if (x >= 0 && x < cols.length && y > 0 && y <= 8) {
+
             squares.push(Utils.getCellKey(cols[x], y))
             xInc++;
+            const lastSquare = squares[squares.length - 1];
+            if (squaresMap.get(lastSquare) && limitation) {
+                break;
+            }
         }
     }
+
     xInc = 1;
     for (let y = squareRowNumber + 1; y <= 8; y++) {
         const x = currentColumnIdx + xInc;
         if (x >= 0 && x < cols.length && y > 0 && y <= 8) {
             squares.push(Utils.getCellKey(cols[x], y))
             xInc++;
+            const lastSquare = squares[squares.length - 1];
+            if (squaresMap.get(lastSquare) && limitation) {
+                break;
+            }
         }
     }
     return squares;

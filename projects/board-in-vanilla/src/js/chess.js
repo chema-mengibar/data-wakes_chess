@@ -10,6 +10,7 @@ export default class Chess {
         this.config = {
             asIcon: ('asIcon' in config) ? config.asIcon : true,
             asLines: ('asLines' in config) ? config.asLines : true,
+            withLimitation: ('withLimitation' in config) ? config.withLimitation : false,
         }
 
         this.figures = figures;
@@ -34,6 +35,49 @@ export default class Chess {
             onAdd: (square, letter, color) => {
                 self.setFigureInSquare(square, letter, color);
                 self.render();
+            },
+            onClearSquare: (square) => {
+                self.setFigureInSquare(square, null);
+                self.render();
+            },
+            onClear: () => {
+                self.squaresMap = Utils.createCellsMap(rows, cols);
+                self.render();
+            },
+            onInit: () => {
+                self.fenToMap(fenBase);
+                self.render();
+            },
+            onDomainW: async() => {
+                await self.render();
+                // White domain
+                const squaresInWhiteDomain = []
+                this.squaresMap.forEach((squareEntry, squareName) => {
+                    if (squareEntry && squareEntry.color === white) {
+                        const squaresFromFigure = this.getOptionfromCell(squareName);
+                        squaresInWhiteDomain.push(...squaresFromFigure);
+                    }
+                })
+                squaresInWhiteDomain.forEach(squareName => {
+                    document.getElementById(squareName).classList.add('with-domain-white');
+                })
+            },
+            onDomainB: async() => {
+                await self.render();
+                // Black domain
+                const squaresInBlackDomain = []
+                self.squaresMap.forEach((squareEntry, squareName) => {
+                    if (squareEntry && squareEntry.color === black) {
+                        const squaresFromFigure = this.getOptionfromCell(squareName);
+                        squaresInBlackDomain.push(...squaresFromFigure);
+                    }
+                })
+                squaresInBlackDomain.forEach(squareName => {
+                    document.getElementById(squareName).classList.add('with-domain-black');
+                })
+            },
+            onDomainsHide: async() => {
+                await self.render();
             }
         }
     }
@@ -46,7 +90,6 @@ export default class Chess {
                 }
                 document.getElementById("chess0").innerHTML = response;
                 this.chessControls.squareControls();
-                // this.artist();
             }
         )
     }
@@ -54,7 +97,7 @@ export default class Chess {
         if (!fen || fen === '') {
             return
         }
-        const fenAsObj = Utils.parseFenStrToObject(fen)
+        const fenAsObj = Utils.parseFenStrToObject(fen);
         this.squaresMap = new Map(Object.entries(fenAsObj));
     }
 
@@ -104,7 +147,12 @@ export default class Chess {
 
     getOptionfromCell(squareName) {
 
+        const limitation = this.config.withLimitation;
+
         const options = [];
+        if (!squareName) {
+            return;
+        }
         const squareNameParts = squareName.split('');
 
         const squareColumnLetter = squareNameParts[0];
@@ -113,7 +161,7 @@ export default class Chess {
         const { letter, color } = this.squaresMap.get(squareName);
 
         if (letter === 'r') {
-            const squareOptions = Squares.getSquaresOptionsFromSquareWithR(squareColumnLetter, squareRowNumber);
+            const squareOptions = Squares.getSquaresOptionsFromSquareWithR(this.squaresMap, squareColumnLetter, squareRowNumber, limitation);
             options.push(...squareOptions);
         }
         if (letter === 'n') {
@@ -125,12 +173,12 @@ export default class Chess {
             options.push(...squareOptions);
         }
         if (letter === 'b') {
-            const squareOptions = Squares.getSquaresOptionsFromSquareWithB(squareColumnLetter, squareRowNumber);
+            const squareOptions = Squares.getSquaresOptionsFromSquareWithB(this.squaresMap, squareColumnLetter, squareRowNumber, limitation);
             options.push(...squareOptions);
         }
         if (letter === 'q') {
-            const squareOptionsVertHorz = Squares.getSquaresOptionsFromSquareWithR(squareColumnLetter, squareRowNumber);
-            const squareOptionsDiagonal = Squares.getSquaresOptionsFromSquareWithB(squareColumnLetter, squareRowNumber);
+            const squareOptionsVertHorz = Squares.getSquaresOptionsFromSquareWithR(this.squaresMap, squareColumnLetter, squareRowNumber, limitation);
+            const squareOptionsDiagonal = Squares.getSquaresOptionsFromSquareWithB(this.squaresMap, squareColumnLetter, squareRowNumber, limitation);
             options.push(...squareOptionsVertHorz, ...squareOptionsDiagonal);
         }
         if (letter === 'k') {
@@ -139,36 +187,6 @@ export default class Chess {
         }
         return options;
     }
-
-    artist() {
-        // White domain
-        const squaresInWhiteDomain = []
-        this.squaresMap.forEach((squareEntry, squareName) => {
-            if (squareEntry && squareEntry.color === white) {
-                const squaresFromFigure = this.getOptionfromCell(squareName)
-                squaresInWhiteDomain.push(...squaresFromFigure)
-            }
-        })
-        squaresInWhiteDomain.forEach(squareName => {
-            document.getElementById(squareName).classList.add('with-domain-white');
-        })
-
-        // Black domain
-        const squaresInBlackDomain = []
-        this.squaresMap.forEach((squareEntry, squareName) => {
-            if (squareEntry && squareEntry.color === black) {
-                const squaresFromFigure = this.getOptionfromCell(squareName)
-                squaresInBlackDomain.push(...squaresFromFigure)
-            }
-        })
-        squaresInBlackDomain.forEach(squareName => {
-            document.getElementById(squareName).classList.add('with-domain-black');
-        })
-
-
-
-    }
-
 
 
 }

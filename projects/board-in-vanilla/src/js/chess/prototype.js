@@ -141,3 +141,57 @@ onRemove: () => {
         // this.squaresMap = Utils.createCellsMap(rows, cols);
         // self.render();
     },
+
+
+
+
+
+    // controlKeys() {
+    //     const self = this;
+    //     document.addEventListener('keydown', (event) => {
+    //         // console.log(event.key)
+    //         // console.log(event.code)
+    //         // console.log(event.charCode)
+    //         // console.log(event.keyCode)
+    //         // console.log(event.which)
+    //         // console.log(event.ctrlKey)
+    //         console.log(event.shiftKey, event.key);
+
+    //         if (['r', 'n', 'b', 'k', 'q', 'p', 'R', 'N', 'B', 'K', 'Q', 'P', ].includes(event.key)) {
+    //             self.buffer.letter = event.key
+    //         } else if (event.key === '+') {
+    //             if (self.buffer.square) {
+    //                 this.callBacks.onAdd();
+    //             }
+    //         } else if (event.key === '-') {
+    //             if (self.buffer.square) {
+    //                 this.callBacks.onRemove();
+    //             }
+
+    //         } else if (event.key === '=' && event.shiftKey) {
+    //             this.callBacks.onClear();
+    //         }
+    //     });
+
+    // }
+
+
+
+    setSelectedSquare(squareName) {
+        this.buffer.square = squareName;
+        const item = document.getElementById(squareName);
+        item.classList.add('with-selection');
+        // if (squareName) {
+        //     const item = document.getElementById(squareName);
+        //     if (item.classList.contains('with-selection')) {
+        //         item.classList.remove('with-selection');
+
+        //     } else {
+        //         item.classList.add('with-selection')
+        //     }
+
+        // } else {
+        //     this.buffer.square = null;
+        // }
+
+    }

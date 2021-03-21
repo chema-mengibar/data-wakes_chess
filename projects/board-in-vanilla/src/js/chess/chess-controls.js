@@ -4,41 +4,9 @@ export default class ChessControl {
         this.buffer = {
             square: null
         };
-        this.callBacks = {
-            onAdd: callBacks.onAdd,
-        }
+        this.callBacks = callBacks;
         this.panelControls();
     }
-
-
-    // controlKeys() {
-    //     const self = this;
-    //     document.addEventListener('keydown', (event) => {
-    //         // console.log(event.key)
-    //         // console.log(event.code)
-    //         // console.log(event.charCode)
-    //         // console.log(event.keyCode)
-    //         // console.log(event.which)
-    //         // console.log(event.ctrlKey)
-    //         console.log(event.shiftKey, event.key);
-
-    //         if (['r', 'n', 'b', 'k', 'q', 'p', 'R', 'N', 'B', 'K', 'Q', 'P', ].includes(event.key)) {
-    //             self.buffer.letter = event.key
-    //         } else if (event.key === '+') {
-    //             if (self.buffer.square) {
-    //                 this.callBacks.onAdd();
-    //             }
-    //         } else if (event.key === '-') {
-    //             if (self.buffer.square) {
-    //                 this.callBacks.onRemove();
-    //             }
-
-    //         } else if (event.key === '=' && event.shiftKey) {
-    //             this.callBacks.onClear();
-    //         }
-    //     });
-
-    // }
 
     squareControls() {
         const self = this;
@@ -58,27 +26,61 @@ export default class ChessControl {
                 const targetElement = event.target || event.srcElement;
                 const letter = targetElement.getAttribute('data-letter');
                 const color = letter === letter.toUpperCase();
-                self.callBacks.onAdd(self.buffer.square, letter, color)
+                self.callBacks.onAdd(self.buffer.square, letter.toLowerCase(), color)
             }, false);
         })
+
+        const buttonClearSquare = document.getElementById("button-clear-square");
+        buttonClearSquare.addEventListener('click', function() {
+            self.callBacks.onClearSquare(self.buffer.square);
+        }, false);
+
+        const buttonDomainW = document.getElementById("button-paint-domains-w");
+        buttonDomainW.addEventListener('click', function() {
+            self.callBacks.onDomainW();
+        }, false);
+
+        const buttonDomainB = document.getElementById("button-paint-domains-b");
+        buttonDomainB.addEventListener('click', function() {
+            self.callBacks.onDomainB();
+        }, false);
+
+        const buttonDomainWB = document.getElementById("button-paint-domains-wb");
+        buttonDomainWB.addEventListener('click', function() {
+            self.callBacks.onDomainW();
+            self.callBacks.onDomainB();
+        }, false);
+
+        const buttonClear = document.getElementById("button-clear");
+        buttonClear.addEventListener('click', function() {
+            self.callBacks.onClear();
+        }, false);
+
+        const buttonInit = document.getElementById("button-init");
+        buttonInit.addEventListener('click', function() {
+            self.callBacks.onInit();
+        }, false);
+
+        const buttonHideDomains = document.getElementById("button-hide-domains-wb");
+        buttonHideDomains.addEventListener('click', function() {
+            self.callBacks.onDomainsHide();
+        }, false);
     }
 
     setSelectedSquare(squareName) {
         this.buffer.square = squareName;
-        const item = document.getElementById(squareName);
-        item.classList.add('with-selection');
-        // if (squareName) {
-        //     const item = document.getElementById(squareName);
-        //     if (item.classList.contains('with-selection')) {
-        //         item.classList.remove('with-selection');
 
-        //     } else {
-        //         item.classList.add('with-selection')
-        //     }
 
-        // } else {
-        //     this.buffer.square = null;
-        // }
+        if (squareName) {
+            const item = document.getElementById(squareName);
+            if (item.classList.contains('with-selection')) {
+                item.classList.remove('with-selection');
+
+            } else {
+                item.classList.add('with-selection')
+            }
+
+        }
 
     }
 }
