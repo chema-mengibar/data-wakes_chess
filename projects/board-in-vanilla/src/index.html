@@ -11,20 +11,29 @@
 <body class="board-body">
     <div id="chess0" class="chess"></div>
     <div id="panel">
-        <button id="act-wFlankQ" type="button">
-            white flank-q
-        </button>
-        <button id="act-wFlankK" type="button">
-            white flank-k
-        </button>
-        <button id="act-bFlankQ" type="button">
-            black flank-q
-        </button>
-        <button id="act-bFlankK" type="button">
-            black flank-k
-        </button>
-    </div>
 
+        <div id="panel-figures">
+            <div>
+                <button class="button button-add-fig" data-letter="r" type="button"> ♜ </button>
+                <button class="button button-add-fig" data-letter="n" type="button"> ♞ </button>
+                <button class="button button-add-fig" data-letter="b" type="button"> ♝ </button>
+                <button class="button button-add-fig" data-letter="k" type="button"> ♚ </button>
+                <button class="button button-add-fig" data-letter="q" type="button"> ♛ </button>
+                <button class="button button-add-fig" data-letter="p" type="button"> ♟ </button>
+
+            </div>
+            <div>
+
+                <button class="button button-add-fig" data-letter="R" type="button"> ♖ </button>
+                <button class="button button-add-fig" data-letter="N" type="button"> ♘ </button>
+                <button class="button button-add-fig" data-letter="B" type="button"> ♗ </button>
+                <button class="button button-add-fig" data-letter="K" type="button"> ♔ </button>
+                <button class="button button-add-fig" data-letter="Q" type="button"> ♕ </button>
+                <button class="button button-add-fig" data-letter="P" type="button"> ♙ </button>
+            </div>
+        </div>
+
+    </div>
     <script type="module" src="js/index.js"></script>
 </body>
 <html>

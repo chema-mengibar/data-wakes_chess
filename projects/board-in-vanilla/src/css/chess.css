@@ -3,6 +3,7 @@
     --color-default-cell-white: #fff;
     --color-default-cell-black: #ccc;
     --color-default-cell-line: grey;
+    --color-square-selection: rgba(168, 198, 0, 0.795);
     /* Anotation cell */
     --color-anotation-color: black;
     /* Last move bg */
@@ -129,6 +130,12 @@ div.chess {
     border: 3px dashed var(--color-move-error);
 }
 
+.chess .chess-row .chess-square.with-selection::after {
+    border: 3px double var(--color-square-selection);
+    border-radius: 16px;
+}
+
+.with-selection::after,
 .with-move-last::before,
 .with-move-ok::before,
 .with-move-error::after,

@@ -1,6 +1,7 @@
 import { rows, cols, fenBase, flankQ, flankK, white, black, figures } from './chess/chess-const.js';
 import Utils from './chess/chess-utils.js';
 import Squares from './chess/chess-squares.js';
+import ChessControls from './chess/chess-controls.js';
 
 export default class Chess {
 
@@ -18,34 +19,48 @@ export default class Chess {
         };
 
         // Run
-        this.mapCells = Utils.createCellsMap(rows, cols);
+        this.squaresMap = Utils.createCellsMap(rows, cols);
 
         const fenStr = ('fen' in config) ? config.fen : fenBase;
         this.fenToMap(fenStr);
+        this.render();
 
-        this.printBoardHtml().then(
+        this.chessControls = new ChessControls(this.chessActions);
+    }
+
+    get chessActions() {
+        const self = this;
+        return {
+            onAdd: (square, letter, color) => {
+                self.setFigureInSquare(square, letter, color);
+                self.render();
+            }
+        }
+    }
+
+    async render() {
+        return this.printBoardHtml().then(
             response => {
                 if (this.config.asLines) {
                     document.getElementById("chess0").classList.add('asLines');
                 }
                 document.getElementById("chess0").innerHTML = response;
-                this.paintArtist();
+                this.chessControls.squareControls();
+                // this.artist();
             }
         )
     }
-
-
     fenToMap(fen) {
         if (!fen || fen === '') {
             return
         }
         const fenAsObj = Utils.parseFenStrToObject(fen)
-        this.mapCells = new Map(Object.entries(fenAsObj));
+        this.squaresMap = new Map(Object.entries(fenAsObj));
     }
 
 
-    setFigureInCell(cellKey, letter, color = white) {
-        this.mapCells.set(cellKey, Utils.asSquare(letter, color));
+    setFigureInSquare(squareName, letter, color = white) {
+        this.squaresMap.set(squareName, Utils.asSquare(letter, color));
     }
 
 
@@ -55,7 +70,7 @@ export default class Chess {
             let htmlRow = `<div class="chess-row" data-row="${row}">`;
             cols.forEach((col) => {
                 const squareName = Utils.getCellKey(col, row);
-                const cellFigure = this.mapCells.get(squareName);
+                const cellFigure = this.squaresMap.get(squareName);
 
                 let figureText = ' ';
                 const cssClasses = [];
@@ -87,85 +102,6 @@ export default class Chess {
         return htmlTable
     }
 
-    paint(listCells) {
-        this.paintClearCells();
-        listCells.forEach(cellKey => {
-            console.log(cellKey);
-            document.getElementById(cellKey).style.backgroundColor = 'red';
-        })
-    }
-
-    paintClearCells() {
-        // let color = white;
-        // this.mapCells.forEach((cellValue, cellKey) => {
-        //     document.getElementById(cellKey).style.backgroundColor = color ? 'white' : 'green';
-        //     color = !color;
-        // })
-    }
-
-    paintArtist() {
-        // document.getElementById('e4').classList.add('with-move-last');
-        // document.getElementById('f3').classList.add('with-move-last');
-
-        // document.getElementById('f5').classList.add('with-move-ok');
-
-        // document.getElementById('f8').classList.add('with-move-error');
-
-        // document.getElementById('d5').classList.add('with-domain-white');
-        // document.getElementById('d7').classList.add('with-domain-black');
-
-        // document.getElementById('d4').classList.add('with-accent-white');
-        // document.getElementById('d6').classList.add('with-accent-black');
-
-        // document.getElementById('e3').classList.add('with-anotation')
-        // document.getElementById('e3').setAttribute('data-anotation', '!?');
-
-
-        // const cellsd5 = this.getOptionfromCell('d5');
-        // cellsd5.forEach(cellKey => {
-        //     document.getElementById(cellKey).classList.add('with-domain-white');
-        // })
-
-        // const cellsf5 = this.getOptionfromCell('f5');
-        // cellsf5.forEach(cellKey => {
-        //     document.getElementById(cellKey).classList.add('with-domain-black');
-        // })
-
-
-
-        const cellsW = [
-            ...this.getOptionfromCell('a2'),
-            ...this.getOptionfromCell('b2'),
-            ...this.getOptionfromCell('b3'),
-            ...this.getOptionfromCell('e3'),
-            ...this.getOptionfromCell('d5'),
-            ...this.getOptionfromCell('g4'),
-            ...this.getOptionfromCell('e6'),
-            ...this.getOptionfromCell('f2'),
-            ...this.getOptionfromCell('e5'),
-            ...this.getOptionfromCell('d4'),
-        ];
-
-        cellsW.forEach(cellKey => {
-            document.getElementById(cellKey).classList.add('with-domain-white');
-        })
-
-        const cellsB = [
-            ...this.getOptionfromCell('a7'),
-            ...this.getOptionfromCell('b7'),
-            ...this.getOptionfromCell('c7'),
-            ...this.getOptionfromCell('f8'),
-            ...this.getOptionfromCell('f5'),
-            ...this.getOptionfromCell('h5'),
-            ...this.getOptionfromCell('f3'),
-        ];
-
-        cellsB.forEach(cellKey => {
-            document.getElementById(cellKey).classList.add('with-domain-black');
-        })
-    }
-
-
     getOptionfromCell(squareName) {
 
         const options = [];
@@ -174,7 +110,7 @@ export default class Chess {
         const squareColumnLetter = squareNameParts[0];
         const squareRowNumber = parseInt(squareNameParts[1], 10);
 
-        const { letter, color } = this.mapCells.get(squareName); // letter, color
+        const { letter, color } = this.squaresMap.get(squareName);
 
         if (letter === 'r') {
             const squareOptions = Squares.getSquaresOptionsFromSquareWithR(squareColumnLetter, squareRowNumber);
@@ -204,35 +140,35 @@ export default class Chess {
         return options;
     }
 
-
-    analyzeCountFiguresInFlank(targetColor = white, targetFlankLetter = 'k') {
-
-        const cellsMatched = [];
-
-        const countFigures = Array.from(this.mapCells).filter((cellEntry) => {
-
-            const cellName = cellEntry[0];
-            const mapEntryKeyParts = cellName.split(''); // a1
-            const mapEntryKeyCol = mapEntryKeyParts[0]; // a
-            // const mapEntryKeyRow = mapEntryKeyParts[1]; // 1
-
-            const mapEntryValue = cellEntry[1];
-
-            const targetFlankColsList = targetFlankLetter === 'q' ? flankQ : flankK;
-
-            if (
-                mapEntryValue &&
-                mapEntryValue.color === targetColor &&
-                targetFlankColsList.includes(mapEntryKeyCol)
-            ) {
-                cellsMatched.push(cellName)
-                return true;
+    artist() {
+        // White domain
+        const squaresInWhiteDomain = []
+        this.squaresMap.forEach((squareEntry, squareName) => {
+            if (squareEntry && squareEntry.color === white) {
+                const squaresFromFigure = this.getOptionfromCell(squareName)
+                squaresInWhiteDomain.push(...squaresFromFigure)
             }
-            return false;
+        })
+        squaresInWhiteDomain.forEach(squareName => {
+            document.getElementById(squareName).classList.add('with-domain-white');
+        })
 
-        }).length;
+        // Black domain
+        const squaresInBlackDomain = []
+        this.squaresMap.forEach((squareEntry, squareName) => {
+            if (squareEntry && squareEntry.color === black) {
+                const squaresFromFigure = this.getOptionfromCell(squareName)
+                squaresInBlackDomain.push(...squaresFromFigure)
+            }
+        })
+        squaresInBlackDomain.forEach(squareName => {
+            document.getElementById(squareName).classList.add('with-domain-black');
+        })
 
-        this.paint(cellsMatched)
-        return countFigures;
+
+
     }
+
+
+
 }
