@@ -83,15 +83,18 @@ export default class Chess {
     }
 
     async render() {
-        return this.printBoardHtml().then(
-            response => {
-                if (this.config.asLines) {
-                    document.getElementById("chess0").classList.add('asLines');
-                }
-                document.getElementById("chess0").innerHTML = response;
-                this.chessControls.squareControls();
-            }
-        )
+
+        await this.printSvg();
+
+        // return this.printBoardHtml().then(
+        //     response => {
+        //         if (this.config.asLines) {
+        //             document.getElementById("chess").classList.add('asLines');
+        //         }
+        //         document.getElementById("chess").innerHTML = response;
+        //         this.chessControls.squareControls();
+        //     }
+        // )
     }
     fenToMap(fen) {
         if (!fen || fen === '') {
@@ -106,6 +109,93 @@ export default class Chess {
         this.squaresMap.set(squareName, Utils.asSquare(letter, color));
     }
 
+
+    async printSvg() {
+
+        const svg = document.getElementById("chess-svg");
+
+        function appendSquare(colIdx, rowIdx) {
+
+            const boardSize = 100;
+
+            const rowInt = 9 - (rowIdx + 1);
+
+            const squareLetter = cols[colIdx];
+            const squareName = Utils.getCellKey(squareLetter, rowInt);
+            const x = (boardSize / 8) * colIdx;
+            const y = (boardSize / 8) * rowIdx;
+
+            const asIcon = true;
+
+            const xT = asIcon ? 2 : 4;
+            const yT = asIcon ? -1 : 8;
+            const dyT = asIcon ? 10 : 0;
+
+            const fig = asIcon ? '♜' : 'n';
+
+            const content = `
+                <rect class="base" width="12.5%" height="12.5%"  />
+                <g class="markers" width="12.5%" height="12.5%"  fill="transparent"/>
+                <text class="piece black ${ asIcon ? 'asIcon' : ''}" text-anchor="start" x="${xT}" y="${yT}" dy="${dyT}">${fig}</text>
+            `;
+
+            const squeareG = document.createElementNS("http://www.w3.org/2000/svg", "g");
+            squeareG.setAttribute('class', 'square');
+            squeareG.setAttribute('id', `${squareName}`);
+            squeareG.setAttribute('data-square', `${squareName}`);
+            squeareG.setAttribute('data-square-col', `${squareLetter}`);
+            squeareG.setAttribute('data-square-row', `${rowInt}`);
+            squeareG.setAttribute('transform', `translate(${x},${y})`);
+
+            squeareG.innerHTML = content;
+
+            svg.appendChild(squeareG);
+            
+        }
+
+        rows.forEach((_, rowIdx) => {
+            cols.forEach((_, colIdx) => {
+                appendSquare(colIdx, rowIdx);
+            })
+        })
+
+        function addMarkerCircle(squareName, type=null){
+            let typeMarker = 'neutral'
+            if( type === white ){
+                typeMarker = 'white';
+            }else if( type === false ){
+                typeMarker = 'black';
+            }
+            const squareNode = document.querySelectorAll(`#${squareName} .markers`)[0];
+            const use = document.createElementNS("http://www.w3.org/2000/svg", "use");
+            use.setAttribute( 'href', `#marker-circle-${typeMarker}`);
+            squareNode.appendChild(use);
+        }
+
+        function addMarkerRect(squareName, type=true){
+            let typeMarker = type ? 'ok' : 'error';
+               const squareNode = document.querySelectorAll(`#${squareName} .markers`)[0];
+            const use = document.createElementNS("http://www.w3.org/2000/svg", "use");
+            use.setAttribute( 'href', `#marker-rect-${typeMarker}`);
+            squareNode.appendChild(use);
+        }
+
+        function addMarkerMoveLast(squareName){
+               const squareNode = document.querySelectorAll(`#${squareName} .markers`)[0];
+            const use = document.createElementNS("http://www.w3.org/2000/svg", "use");
+            use.setAttribute( 'href', `#marker-move-last`);
+            squareNode.appendChild(use);
+        }
+
+
+
+        addMarkerCircle('e6',white);
+        addMarkerRect('a1');
+        addMarkerMoveLast('a2');
+        addMarkerRect('e6',false);
+  
+
+    }
 
     async printBoardHtml() {
         let htmlTable = '';

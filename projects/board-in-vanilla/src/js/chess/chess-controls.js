@@ -10,61 +10,61 @@ export default class ChessControl {
 
     squareControls() {
         const self = this;
-        document.querySelectorAll('.chess-square').forEach(boardSquare => {
-            boardSquare.addEventListener('click', function(event) {
-                const targetElement = event.target || event.srcElement;
-                const targetSquareName = targetElement.getAttribute('data-square');
-                self.setSelectedSquare(targetSquareName);
-            }, false);
-        })
+        // document.querySelectorAll('.chess-square').forEach(boardSquare => {
+        //     boardSquare.addEventListener('click', function(event) {
+        //         const targetElement = event.target || event.srcElement;
+        //         const targetSquareName = targetElement.getAttribute('data-square');
+        //         self.setSelectedSquare(targetSquareName);
+        //     }, false);
+        // })
     }
 
     panelControls() {
         const self = this;
-        document.querySelectorAll('.button-add-fig').forEach(button => {
-            button.addEventListener('click', function(event) {
-                const targetElement = event.target || event.srcElement;
-                const letter = targetElement.getAttribute('data-letter');
-                const color = letter === letter.toUpperCase();
-                self.callBacks.onAdd(self.buffer.square, letter.toLowerCase(), color)
-            }, false);
-        })
+        // document.querySelectorAll('.button-add-fig').forEach(button => {
+        //     button.addEventListener('click', function(event) {
+        //         const targetElement = event.target || event.srcElement;
+        //         const letter = targetElement.getAttribute('data-letter');
+        //         const color = letter === letter.toUpperCase();
+        //         self.callBacks.onAdd(self.buffer.square, letter.toLowerCase(), color)
+        //     }, false);
+        // })
 
-        const buttonClearSquare = document.getElementById("button-clear-square");
-        buttonClearSquare.addEventListener('click', function() {
-            self.callBacks.onClearSquare(self.buffer.square);
-        }, false);
+        // const buttonClearSquare = document.getElementById("button-clear-square");
+        // buttonClearSquare.addEventListener('click', function() {
+        //     self.callBacks.onClearSquare(self.buffer.square);
+        // }, false);
 
-        const buttonDomainW = document.getElementById("button-paint-domains-w");
-        buttonDomainW.addEventListener('click', function() {
-            self.callBacks.onDomainW();
-        }, false);
+        // const buttonDomainW = document.getElementById("button-paint-domains-w");
+        // buttonDomainW.addEventListener('click', function() {
+        //     self.callBacks.onDomainW();
+        // }, false);
 
-        const buttonDomainB = document.getElementById("button-paint-domains-b");
-        buttonDomainB.addEventListener('click', function() {
-            self.callBacks.onDomainB();
-        }, false);
+        // const buttonDomainB = document.getElementById("button-paint-domains-b");
+        // buttonDomainB.addEventListener('click', function() {
+        //     self.callBacks.onDomainB();
+        // }, false);
 
-        const buttonDomainWB = document.getElementById("button-paint-domains-wb");
-        buttonDomainWB.addEventListener('click', function() {
-            self.callBacks.onDomainW();
-            self.callBacks.onDomainB();
-        }, false);
+        // const buttonDomainWB = document.getElementById("button-paint-domains-wb");
+        // buttonDomainWB.addEventListener('click', function() {
+        //     self.callBacks.onDomainW();
+        //     self.callBacks.onDomainB();
+        // }, false);
 
-        const buttonClear = document.getElementById("button-clear");
-        buttonClear.addEventListener('click', function() {
-            self.callBacks.onClear();
-        }, false);
+        // const buttonClear = document.getElementById("button-clear");
+        // buttonClear.addEventListener('click', function() {
+        //     self.callBacks.onClear();
+        // }, false);
 
-        const buttonInit = document.getElementById("button-init");
-        buttonInit.addEventListener('click', function() {
-            self.callBacks.onInit();
-        }, false);
+        // const buttonInit = document.getElementById("button-init");
+        // buttonInit.addEventListener('click', function() {
+        //     self.callBacks.onInit();
+        // }, false);
 
-        const buttonHideDomains = document.getElementById("button-hide-domains-wb");
-        buttonHideDomains.addEventListener('click', function() {
-            self.callBacks.onDomainsHide();
-        }, false);
+        // const buttonHideDomains = document.getElementById("button-hide-domains-wb");
+        // buttonHideDomains.addEventListener('click', function() {
+        //     self.callBacks.onDomainsHide();
+        // }, false);
     }
 
     setSelectedSquare(squareName) {
