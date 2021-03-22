@@ -22,3 +22,9 @@ than in Browser: `http://localhost:3001/`
 - https://jestjs.io/docs/api
 - https://jestjs.io/docs/ecmascript-modules
 - https://jest-bot.github.io/jest/docs/expect.html
+
+
+## Issues
+
+#### Setup: wepack serve
+Path windows `PATH:  C:\Windows\System32\;`

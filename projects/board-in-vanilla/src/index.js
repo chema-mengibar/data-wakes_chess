@@ -1,4 +1,5 @@
-import Chess from './chess.js'
+import Chess from './js/Chess.js'
+import './index.scss';
 
 const fens = [
     '5k2/ppp5/4P3/3RBr1p/3Q2P1/1K2Nr2/PP3P2/8 b - - 1 32',
@@ -13,5 +14,6 @@ const configA = {
     asLines: true,
     withLimitation: true
 }
+
 
 const chess = new Chess(configA)
