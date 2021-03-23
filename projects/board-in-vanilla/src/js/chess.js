@@ -98,6 +98,60 @@ export default class Chess {
                     classList.remove('with-domain-white');
                     classList.remove('with-domain-black');
                 })
+            },
+            onDomainsSquare: async(squareName) => {
+                const squarePiece = self.squaresMap.get(squareName);
+                if (squarePiece) {
+                    Svg.addMarkerCircle(squareName, squarePiece.color);
+                    const squaresFromFigure = this.getOptionfromCell(squareName);
+                    squaresFromFigure.forEach(domainSquareName => {
+                        const classNameDomain = squarePiece.color ? 'with-domain-white' : 'with-domain-black';
+                        document.getElementById(`base-${domainSquareName}`).classList.add(classNameDomain);
+                    })
+                }
+            },
+            onDomainAttacksSquare: async(squareName) => {
+                const squarePiece = self.squaresMap.get(squareName);
+                if (squarePiece) {
+                    Svg.addMarkerCircle(squareName, squarePiece.color);
+                    const squaresOptionsFromFigure = this.getOptionfromCell(squareName);
+                    squaresOptionsFromFigure.forEach(domainSquareName => {
+                        const classNameDomain = squarePiece.color ? 'with-domain-white' : 'with-domain-black';
+                        document.getElementById(`base-${domainSquareName}`).classList.add(classNameDomain);
+
+                        self.squaresMap.forEach((squareMapValue, squareMapKey) => {
+                            if (squareMapKey !== squareName && squareMapValue && squareMapValue.color !== squarePiece.color) {
+
+                                const squareMapSquareOptions = self.getOptionfromCell(squareMapKey);
+                                console.debug('[CHESS] onDomainAttacksSquare: mapOptions', squareMapSquareOptions);
+                                console.debug('[CHESS] onDomainAttacksSquare: ´fgure', squaresOptionsFromFigure);
+
+                                const uniques = squaresOptionsFromFigure.filter(value => squareMapSquareOptions.includes(value));
+                                uniques.forEach((commonSquare) => {
+                                    Svg.addMarkerCircle(squareMapKey, squareMapValue.color);
+                                    Svg.addMarkerCircle(commonSquare, squareMapValue.color);
+
+                                })
+                            }
+                        })
+                    })
+                }
+            },
+            onAttacksSquare: async(squareName) => {
+                const squarePiece = self.squaresMap.get(squareName);
+                if (squarePiece) {
+                    Svg.addMarkerCircle(squareName, squarePiece.color);
+                    self.squaresMap.forEach((squareMapValue, squareMapKey) => {
+                        if (squareMapKey !== squareName && squareMapValue && squareMapValue.color !== squarePiece.color) {
+                            const squareMapSquareOptions = self.getOptionfromCell(squareMapKey);
+                            console.debug('[CHESS] onDomainAttacksSquare: mapOptions', squareMapSquareOptions);
+                            if (squareMapSquareOptions.includes(squareName)) {
+                                Svg.addMarkerCircle(squareMapKey, squareMapValue.color);
+                                this.chessActions.onDomainsSquare(squareMapKey);
+                            }
+                        }
+                    })
+                }
             }
         }
     }
@@ -120,7 +174,8 @@ export default class Chess {
     }
 
     async drawBoard() {
-        const svg = document.getElementById("chess-svg");
+        const svg = document.getElementById("svg-squares");
+        const svgCoordinates = document.getElementById("svg-coordinates");
         rows.forEach((_, rowIdx) => {
             cols.forEach((_, colIdx) => {
                 const squareEl = Svg.createSquare(colIdx, rowIdx, this.config.asIcon);
@@ -128,7 +183,13 @@ export default class Chess {
             })
         })
 
+
         this.drawPiecesFromMap()
+
+        const coordinatesItems = Svg.createCoordinates()
+        coordinatesItems.forEach(coorItem => {
+            svgCoordinates.appendChild(coorItem);
+        })
 
         // setTimeout(() => {
         //     this.chessActions.onDomainB();

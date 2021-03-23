@@ -1,7 +1,8 @@
-import { cols, white, } from './chess-const.js'
+import { rows, cols, white, } from './chess-const.js'
 import Utils from './chess-utils.js';
 
-const boardSize = 100;
+const boardSize = 90;
+const div = (boardSize / 8);
 
 function addMarkerCircle(squareName, type = null) {
     let typeMarker = 'neutral'
@@ -37,7 +38,7 @@ function addMarkerMoveLast(squareName) {
 function addMarkerNotation(squareName, text) {
     const textEl = document.createElementNS("http://www.w3.org/2000/svg", "text");
     const textNode = document.createTextNode(text);
-    textEl.setAttribute('x', '12%');
+    textEl.setAttribute('x', `${div}%`);
     textEl.setAttribute('y', '0');
     textEl.setAttribute('dy', '3');
     textEl.setAttribute('data-square', `${squareName}`);
@@ -55,25 +56,27 @@ function createSquare(colIdx, rowIdx, asIcon = true) {
 
     const squareLetter = cols[colIdx];
     const squareName = Utils.getCellKey(squareLetter, rowInt);
-    const x = (boardSize / 8) * colIdx;
-    const y = (boardSize / 8) * rowIdx;
+    const x = div * colIdx;
+    const y = div * rowIdx;
 
-    const xT = asIcon ? 2 : 4;
-    const yT = asIcon ? -1 : 8;
+    const xT = asIcon ? 1.5 : 4;
+    const yT = asIcon ? -1.5 : 8;
     const dyT = asIcon ? 10 : 0;
+
+    console.log((boardSize / 8))
 
     const content = `
         <title>${squareName}</title>
         <rect id="base-${squareName}" 
             data-square="${squareName}"
             class="base" 
-            width="12.5%" 
-            height="12.5%"  />
+            width="${div}%" 
+            height="${div}%"  />
         <g id="markers-${squareName}" 
             data-square="${squareName}"
             class="markers" 
-            width="12.5%" 
-            height="12.5%"  
+            width="${div}%" 
+            height="${div}%"  
             fill="transparent"
             />
         <text id="piece-${squareName}" 
@@ -109,13 +112,48 @@ function setPieceInSquare(squareName, pieceLetter = '', color = true) {
     squareNode.textContent = pieceLetter
 }
 
+function createCoordinates() {
+    const elements = []
+    cols.forEach((col, idx) => {
+        const textEl = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        const textNode = document.createTextNode(col);
+        textEl.setAttribute('x', `${div*idx}%`);
+        textEl.setAttribute('y', '0');
+        textEl.setAttribute('dy', '0');
+        textEl.setAttribute('dx', '1');
+        textEl.setAttribute('data-coord-col', `${col}`);
+        textEl.setAttribute('class', 'board-coordinate-col');
+        textEl.setAttribute('text-anchor', 'start');
+        textEl.appendChild(textNode);
+
+        elements.push(textEl);
+    })
+
+    rows.forEach((row, idx) => {
+        const textEl = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        const textNode = document.createTextNode(row);
+        textEl.setAttribute('x', '0');
+        textEl.setAttribute('y', `${div*idx}%`);
+        textEl.setAttribute('dy', '6');
+        textEl.setAttribute('dx', '-3');
+        textEl.setAttribute('data-coord-row', `${row}`);
+        textEl.setAttribute('class', 'board-coordinate-row');
+        textEl.setAttribute('text-anchor', 'start');
+        textEl.appendChild(textNode);
+
+        elements.push(textEl);
+    })
+    return elements;
+}
+
 export default {
     addMarkerCircle,
     addMarkerRect,
     addMarkerMoveLast,
     addMarkerNotation,
     createSquare,
-    setPieceInSquare
+    setPieceInSquare,
+    createCoordinates
 }
 
 /*

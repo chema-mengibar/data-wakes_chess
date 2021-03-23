@@ -8,7 +8,7 @@
 .square {
     cursor: pointer;
     .base {
-        fill: rgb(39, 42, 49);
+        fill: rgba(39, 42, 49, .5);
         stroke: rgb(180, 181, 185);
         stroke-opacity: 0.34;
         stroke-width: 0.27px;
@@ -18,6 +18,12 @@
             fill: #02010166;
         }
     }
+}
+
+.board-coordinate-col,
+.board-coordinate-row {
+    font-size: 3px;
+    fill: #999;
 }
 
 .base {

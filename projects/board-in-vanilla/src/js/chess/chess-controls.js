@@ -89,6 +89,24 @@ export default class ChessControl {
         buttonHideDomains.addEventListener('click', function() {
             self.callBacks.onDomainsHide();
         }, false);
+
+        const buttonSquareDomains = document.getElementById("button-paint-domains-square");
+        buttonSquareDomains.addEventListener('click', function() {
+            self.callBacks.onDomainsSquare(self.buffer.squareTarget);
+            self.clearSelectedSquareFromBuffer();
+        }, false);
+
+        const buttonSquareDomainAttacks = document.getElementById("button-paint-domain-attack-square");
+        buttonSquareDomainAttacks.addEventListener('click', function() {
+            self.callBacks.onDomainAttacksSquare(self.buffer.squareTarget);
+            self.clearSelectedSquareFromBuffer();
+        }, false);
+
+        const buttonSquareAttacks = document.getElementById("button-paint-attack-square");
+        buttonSquareAttacks.addEventListener('click', function() {
+            self.callBacks.onAttacksSquare(self.buffer.squareTarget);
+            self.clearSelectedSquareFromBuffer();
+        }, false);
     }
 
     async setBufferSquareTarget(squareName) {

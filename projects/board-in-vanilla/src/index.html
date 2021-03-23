@@ -12,14 +12,16 @@
         <div class="block-board">
             <div class="board">
                 <svg id="chess-svg" width="100%" height="auto" viewBox=" 0 0 100 100" xmlns="http://www.w3.org/2000/svg ">
-                    <g visibility="hidden">
-                        <circle id="marker-circle-neutral" class="marker-circle-neutral" stroke-dasharray="1" cx="6.2" cy="6.2" r="5" stroke="black" stroke-width=".5"/>
-                        <circle id="marker-circle-black" class="marker-circle-black" stroke-dasharray="1" cx="6.2" cy="6.2" r="5" stroke="black" stroke-width=".5"/>
-                        <circle id="marker-circle-white" class="marker-circle-white" stroke-dasharray="1" cx="6.2" cy="6.2" r="5" stroke="black" stroke-width=".5"/>
-                        <circle id="marker-move-last" class="marker-move-last"  cx="6.2" cy="6.2" r="3.5" fill="black"/>
-                        <rect  fill="transparent" x="0.75%" y="0.75%" width="11%"  height="11%" id="marker-rect-ok" class="marker-rect-ok" />
-                        <rect  fill="transparent" x="0.75%" y="0.75%" width="11%"  height="11%" id="marker-rect-error" class="marker-rect-error" />
-                        </g>
+                    <g id="svg-markers" visibility="hidden">
+                        <circle id="marker-circle-neutral" class="marker-circle-neutral" stroke-dasharray="1" cx="5.6" cy="5.6" r="5" stroke="black" stroke-width=".5"/>
+                        <circle id="marker-circle-black" class="marker-circle-black" stroke-dasharray="1" cx="5.6" cy="5.6" r="5" stroke="black" stroke-width=".5"/>
+                        <circle id="marker-circle-white" class="marker-circle-white" stroke-dasharray="1" cx="5.6" cy="5.6" r="5" stroke="black" stroke-width=".5"/>
+                        <circle id="marker-move-last" class="marker-move-last"  cx="5.6" cy="5.6" r="3.5" fill="black"/>
+                        <rect  fill="transparent" x="0.75%" y="0.75%" width="10%"  height="10%" id="marker-rect-ok" class="marker-rect-ok" />
+                        <rect  fill="transparent" x="0.75%" y="0.75%" width="10%"  height="10%" id="marker-rect-error" class="marker-rect-error" />
+                    </g>
+                    <g id="svg-squares" transform="translate(6,6)"></g>
+                    <g id="svg-coordinates" transform="translate(6,4)"></g>
       
                 </svg>
             </div>
@@ -49,6 +51,10 @@
                 <div class="figures-palette">
                     <button id="button-clear-square" class="button " type="button "> x </button>
                 </div>
+                <div class="figures-palette">
+                    <button class="button " id="button-clear" type="button"> clear board </button>
+                    <button class="button " id="button-init" type="button"> init board </button>
+                </div>
 
             </section>
             <section>
@@ -62,7 +68,11 @@
 
                 <h1> Analyse </h1>
                 <h3> Domains </h3>
-
+                <div class="figures-palette">
+                    <button class="button " id="button-paint-domains-square" type="button "> square domain </button>
+                    <button class="button " id="button-paint-domain-attack-square" type="button "> square domain attacks </button>
+                    <button class="button " id="button-paint-attack-square" type="button "> square attacks </button>
+                </div>
                 <div class="figures-palette">
                     <button class="button " id="button-paint-domains-w" type="button "> domains w </button>
                     <button class="button " id="button-paint-domains-b" type="button "> domains b </button>
@@ -71,10 +81,7 @@
                 <div class="figures-palette">
                     <button class="button " id="button-hide-domains-wb" type="button "> hide domains wb </button>
                 </div>
-                <div class="figures-palette">
-                    <button class="button " id="button-clear" type="button"> clear board </button>
-                    <button class="button " id="button-init" type="button"> init board </button>
-                </div>
+
 
                 <h2> Flanks </h2>
                 <small>@todo</small>
