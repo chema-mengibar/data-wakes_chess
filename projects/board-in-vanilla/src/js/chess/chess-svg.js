@@ -102,6 +102,10 @@ function setPieceInSquare(squareName, pieceLetter = '', color = true) {
     const squareNode = document.getElementById(`piece-${squareName}`);
     const className = color ? 'white' : 'black';
     squareNode.classList.add(className);
+    const notClassName = color ? 'black' : 'white';
+    if (color && squareNode.classList.contains(notClassName)) {
+        squareNode.classList.remove(notClassName);
+    }
     squareNode.textContent = pieceLetter
 }
 

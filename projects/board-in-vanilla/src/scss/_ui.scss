@@ -4,21 +4,24 @@ body {
     margin: 0;
 }
 
+body {
+    background-color: rgb(50, 54, 60);
+}
+
 .layout-centered {
     width: 100%;
-    max-width: 420px;
+    // max-width: 420px; // mobile
 }
 
 .blocks {
     display: flex;
-    flex-direction: column;
+    flex-direction: row; // column
     height: 100%;
     overflow: hidden;
 }
 
 .block-board,
 .block-panel {
-    background-color: rgb(50, 54, 60);
     padding: 20px;
 }
 

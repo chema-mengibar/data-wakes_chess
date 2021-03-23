@@ -37,11 +37,22 @@ export default class Chess {
     get chessActions() {
         const self = this;
         return {
+            movePiecesFromSquares: async(originSquare, targetSquare) => {
+                const originPiece = self.squaresMap.get(originSquare);
+                if (originPiece) {
+                    self.setFigureInSquare(targetSquare, originPiece.letter, originPiece.color);
+                    self.setFigureInSquare(originSquare, null);
+                    self.drawPiecesFromMap();
+                    return true;
+                }
+            },
             onAdd: (square, letter, color) => {
+                if (!square) { return; }
                 self.setFigureInSquare(square, letter, color);
                 self.drawPiecesFromMap();
             },
             onClearSquare: (square) => {
+                if (!square) { return; }
                 self.setFigureInSquare(square, null);
                 self.drawPiecesFromMap();
             },

@@ -6,11 +6,17 @@
 }
 
 .square {
+    cursor: pointer;
     .base {
         fill: rgb(39, 42, 49);
         stroke: rgb(180, 181, 185);
         stroke-opacity: 0.34;
         stroke-width: 0.27px;
+    }
+    &:hover {
+        .base:not(.with-selection) {
+            fill: #02010166;
+        }
     }
 }
 

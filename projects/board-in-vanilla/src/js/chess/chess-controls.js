@@ -2,7 +2,7 @@ export default class ChessControl {
 
     constructor(callBacks) {
         this.buffer = {
-            square: null
+            squareTarget: null,
         };
         this.callBacks = callBacks;
         this.panelControls();
@@ -15,9 +15,30 @@ export default class ChessControl {
             boardSquare.addEventListener('click', function(event) {
                 const targetElement = event.target || event.srcElement;
                 const targetSquareName = targetElement.getAttribute('data-square');
-                self.setSelectedSquare(targetSquareName);
+                console.log('[CONTROLS] square click:', targetSquareName);
+                self.checkOnSelectSquare(targetSquareName);
             }, false);
         })
+
+    }
+
+    async checkOnSelectSquare(selectedSquare) {
+        console.log('[CONTROLS] checkOnSelectSquare:', selectedSquare, this.buffer.squareTarget);
+        if (this.buffer.squareTarget) {
+            if (selectedSquare === this.buffer.squareTarget) {
+                this.clearBufferAndSelection();
+            } else {
+                const moved = await this.callBacks.movePiecesFromSquares(this.buffer.squareTarget, selectedSquare);
+                if (moved) {
+                    this.clearBufferAndSelection();
+                } else {
+                    this.clearSelectedSquareFromBuffer()
+                    this.setBufferSquareTarget(selectedSquare);
+                }
+            }
+        } else {
+            this.setBufferSquareTarget(selectedSquare);
+        }
     }
 
     panelControls() {
@@ -27,14 +48,14 @@ export default class ChessControl {
                 const targetElement = event.target || event.srcElement;
                 const letter = targetElement.getAttribute('data-letter');
                 const color = letter === letter.toUpperCase();
-                self.callBacks.onAdd(self.buffer.square, letter.toLowerCase(), color)
+                self.callBacks.onAdd(self.buffer.squareTarget, letter.toLowerCase(), color)
                 self.clearSelectedSquareFromBuffer();
             }, false);
         })
 
         const buttonClearSquare = document.getElementById("button-clear-square");
         buttonClearSquare.addEventListener('click', function() {
-            self.callBacks.onClearSquare(self.buffer.square);
+            self.callBacks.onClearSquare(self.buffer.squareTarget);
             self.clearSelectedSquareFromBuffer();
         }, false);
 
@@ -70,9 +91,8 @@ export default class ChessControl {
         }, false);
     }
 
-    setSelectedSquare(squareName) {
-        this.buffer.square = squareName;
-
+    async setBufferSquareTarget(squareName) {
+        this.buffer.squareTarget = squareName;
         if (squareName) {
             const item = document.getElementById(`base-${squareName}`);
 
@@ -85,16 +105,24 @@ export default class ChessControl {
         }
     }
 
+
     clearSelectedSquareFromBuffer() {
-        const squareName = this.buffer.square;
+        const squareName = this.buffer.squareTarget;
         if (squareName) {
             const item = document.getElementById(`base-${squareName}`);
-
             if (item.classList.contains('with-selection')) {
                 item.classList.remove('with-selection');
-
             }
-            this.buffer.square = null;
+            this.buffer.squareTarget = null;
         }
+    }
+
+    clearBufferAndSelection() {
+        this.buffer.squareTarget = null;
+
+        document.querySelectorAll('.base').forEach(squareBase => {
+            squareBase.classList.remove('with-selection');
+        })
+
     }
 }
