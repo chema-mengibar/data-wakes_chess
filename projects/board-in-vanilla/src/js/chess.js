@@ -1,6 +1,7 @@
 import { rows, cols, fenBase, flankQ, flankK, white, black, figures } from './chess/chess-const.js';
 import Utils from './chess/chess-utils.js';
 import Squares from './chess/chess-squares.js';
+import Svg from './chess/chess-svg.js';
 import ChessControls from './chess/chess-controls.js';
 
 export default class Chess {
@@ -34,22 +35,22 @@ export default class Chess {
         return {
             onAdd: (square, letter, color) => {
                 self.setFigureInSquare(square, letter, color);
-                self.render();
+                self.drawPiecesFromMap();
             },
             onClearSquare: (square) => {
                 self.setFigureInSquare(square, null);
-                self.render();
+                self.drawPiecesFromMap();
             },
             onClear: () => {
                 self.squaresMap = Utils.createCellsMap(rows, cols);
-                self.render();
+                self.drawPiecesFromMap();
             },
             onInit: () => {
                 self.fenToMap(fenBase);
-                self.render();
+                self.drawPiecesFromMap();
             },
             onDomainW: async() => {
-                await self.render();
+
                 // White domain
                 const squaresInWhiteDomain = []
                 this.squaresMap.forEach((squareEntry, squareName) => {
@@ -59,11 +60,11 @@ export default class Chess {
                     }
                 })
                 squaresInWhiteDomain.forEach(squareName => {
-                    document.getElementById(squareName).classList.add('with-domain-white');
+                    document.getElementById(`base-${squareName}`).classList.add('with-domain-white');
                 })
             },
             onDomainB: async() => {
-                await self.render();
+
                 // Black domain
                 const squaresInBlackDomain = []
                 self.squaresMap.forEach((squareEntry, squareName) => {
@@ -73,29 +74,20 @@ export default class Chess {
                     }
                 })
                 squaresInBlackDomain.forEach(squareName => {
-                    document.getElementById(squareName).classList.add('with-domain-black');
+                    document.getElementById(`base-${squareName}`).classList.add('with-domain-black');
                 })
             },
             onDomainsHide: async() => {
-                await self.render();
+
             }
         }
     }
 
-    async render() {
+    render() {
+        this.drawBoard();
 
-        await this.printSvg();
-
-        // return this.printBoardHtml().then(
-        //     response => {
-        //         if (this.config.asLines) {
-        //             document.getElementById("chess").classList.add('asLines');
-        //         }
-        //         document.getElementById("chess").innerHTML = response;
-        //         this.chessControls.squareControls();
-        //     }
-        // )
     }
+
     fenToMap(fen) {
         if (!fen || fen === '') {
             return
@@ -104,135 +96,50 @@ export default class Chess {
         this.squaresMap = new Map(Object.entries(fenAsObj));
     }
 
-
     setFigureInSquare(squareName, letter, color = white) {
         this.squaresMap.set(squareName, Utils.asSquare(letter, color));
     }
 
-
-    async printSvg() {
-
+    drawBoard() {
         const svg = document.getElementById("chess-svg");
-
-        function appendSquare(colIdx, rowIdx) {
-
-            const boardSize = 100;
-
-            const rowInt = 9 - (rowIdx + 1);
-
-            const squareLetter = cols[colIdx];
-            const squareName = Utils.getCellKey(squareLetter, rowInt);
-            const x = (boardSize / 8) * colIdx;
-            const y = (boardSize / 8) * rowIdx;
-
-            const asIcon = true;
-
-            const xT = asIcon ? 2 : 4;
-            const yT = asIcon ? -1 : 8;
-            const dyT = asIcon ? 10 : 0;
-
-            const fig = asIcon ? '♜' : 'n';
-
-            const content = `
-                <rect class="base" width="12.5%" height="12.5%"  />
-                <g class="markers" width="12.5%" height="12.5%"  fill="transparent"/>
-                <text class="piece black ${ asIcon ? 'asIcon' : ''}" text-anchor="start" x="${xT}" y="${yT}" dy="${dyT}">${fig}</text>
-            `;
-
-            const squeareG = document.createElementNS("http://www.w3.org/2000/svg", "g");
-            squeareG.setAttribute('class', 'square');
-            squeareG.setAttribute('id', `${squareName}`);
-            squeareG.setAttribute('data-square', `${squareName}`);
-            squeareG.setAttribute('data-square-col', `${squareLetter}`);
-            squeareG.setAttribute('data-square-row', `${rowInt}`);
-            squeareG.setAttribute('transform', `translate(${x},${y})`);
-
-            squeareG.innerHTML = content;
-
-            svg.appendChild(squeareG);
-            
-        }
-
         rows.forEach((_, rowIdx) => {
             cols.forEach((_, colIdx) => {
-                appendSquare(colIdx, rowIdx);
+                const squareEl = Svg.createSquare(colIdx, rowIdx, this.config.asIcon);
+                svg.appendChild(squareEl);
             })
         })
 
-        function addMarkerCircle(squareName, type=null){
-            let typeMarker = 'neutral'
-            if( type === white ){
-                typeMarker = 'white';
-            }else if( type === false ){
-                typeMarker = 'black';
-            }
-            const squareNode = document.querySelectorAll(`#${squareName} .markers`)[0];
-            const use = document.createElementNS("http://www.w3.org/2000/svg", "use");
-            use.setAttribute( 'href', `#marker-circle-${typeMarker}`);
-            squareNode.appendChild(use);
-        }
+        this.drawPiecesFromMap()
 
-        function addMarkerRect(squareName, type=true){
-            let typeMarker = type ? 'ok' : 'error';
-               const squareNode = document.querySelectorAll(`#${squareName} .markers`)[0];
-            const use = document.createElementNS("http://www.w3.org/2000/svg", "use");
-            use.setAttribute( 'href', `#marker-rect-${typeMarker}`);
-            squareNode.appendChild(use);
-        }
+        setTimeout(() => {
+            this.chessActions.onDomainB();
+            this.chessActions.onDomainW();
 
-        function addMarkerMoveLast(squareName){
-               const squareNode = document.querySelectorAll(`#${squareName} .markers`)[0];
-            const use = document.createElementNS("http://www.w3.org/2000/svg", "use");
-            use.setAttribute( 'href', `#marker-move-last`);
-            squareNode.appendChild(use);
-        }
+            Svg.addMarkerRect('d6', true);
+            Svg.addMarkerNotation('d6', 'x');
+            Svg.addMarkerMoveLast('g3');
+            Svg.addMarkerMoveLast('d6');
 
-
-
-        addMarkerCircle('e6',white);
-        addMarkerRect('a1');
-        addMarkerMoveLast('a2');
-        addMarkerRect('e6',false);
-  
-
+            Svg.addMarkerCircle('c7');
+            Svg.addMarkerNotation('c7', '10');
+        }, 1000)
     }
 
-    async printBoardHtml() {
-        let htmlTable = '';
-        rows.forEach((row) => {
-            let htmlRow = `<div class="chess-row" data-row="${row}">`;
-            cols.forEach((col) => {
-                const squareName = Utils.getCellKey(col, row);
-                const cellFigure = this.squaresMap.get(squareName);
-
-                let figureText = ' ';
-                const cssClasses = [];
-                if (cellFigure) {
-
-                    const selectedFigure = figures[cellFigure.letter];
-                    if (this.config.asIcon === true) {
-                        figureText = selectedFigure.asIcon(cellFigure.color);
-                    } else {
-                        figureText = selectedFigure.asLetter(cellFigure.color);
-                    }
-
-                    if (this.config.asIcon) {
-                        cssClasses.push('as-icon');
-                    }
-
-                    if (this.config.asIcon === false && cellFigure.color) {
-                        cssClasses.push('as-text-white');
-                    } else if (this.config.asIcon === false && !cellFigure.color) {
-                        cssClasses.push('as-text-black');
-                    }
+    drawPiecesFromMap() {
+        this.squaresMap.forEach((squareEntry, squareKey) => {
+            if (squareEntry) {
+                let figureText = '';
+                const entryFigure = figures[squareEntry.letter];
+                if (this.config.asIcon === true) {
+                    figureText = entryFigure.asIcon(squareEntry.color);
+                } else {
+                    figureText = entryFigure.asLetter(squareEntry.color);
                 }
-                const htmlCol = `<div id="${squareName}" title="${squareName}" class="chess-square ${  cssClasses.join(' ') }" data-col="${col}" data-square="${squareName}">${figureText}</div>`;
-                htmlRow += htmlCol;
-            })
-            htmlRow += '</div>';
-            htmlTable += htmlRow;
+                Svg.setPieceInSquare(squareKey, figureText, squareEntry.color)
+            } else {
+                Svg.setPieceInSquare(squareKey)
+            }
         })
-        return htmlTable
     }
 
     getOptionfromCell(squareName) {
