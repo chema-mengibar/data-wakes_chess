@@ -1,9 +1,3 @@
-.block-board,
-.block-panel {
-    background-color: rgb(50, 54, 60);
-    padding: 20px;
-}
-
 .board {
     max-width: 300px;
     width: 100%;
@@ -21,15 +15,17 @@
 }
 
 .base {
-    &.with-domain-black:not(.with-domain-white) {
+    &.with-domain-black:not(.with-domain-white):not(.with-selection) {
         fill: #570a15;
     }
-    &.with-domain-white:not(.with-domain-black) {
+    &.with-domain-white:not(.with-domain-black):not(.with-selection) {
         fill: #666;
     }
-    &.with-domain-white.with-domain-black {
+    &.with-domain-white.with-domain-black:not(.with-selection) {
         fill: #e7442b91;
-        ;
+    }
+    &.with-selection {
+        fill: #020101;
     }
 }
 

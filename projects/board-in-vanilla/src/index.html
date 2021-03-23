@@ -8,7 +8,7 @@
 
 <body class="board-body">
 
-    <div class="layout centered">
+    <div class="layout-centered blocks">
         <div class="block-board">
             <div class="board">
                 <svg id="chess-svg" width="100%" height="auto" viewBox=" 0 0 100 100" xmlns="http://www.w3.org/2000/svg ">
@@ -25,45 +25,73 @@
             </div>
         </div>
         <div class="block-panel">
+            <section>
+                <div class="copy-headline">
+                    <h1> Pieces </h1>
+                    <small>(Select a cell ﬁrst to add)</small>
+                </div>
+                <div class="figures-palette">
+                    <button class="button button-add-fig white" data-letter="R" type="button"> ♖ </button>
+                    <button class="button button-add-fig white" data-letter="N" type="button"> ♘ </button>
+                    <button class="button button-add-fig white" data-letter="B" type="button"> ♗ </button>
+                    <button class="button button-add-fig white" data-letter="K" type="button"> ♔ </button>
+                    <button class="button button-add-fig white" data-letter="Q" type="button"> ♕ </button>
+                    <button class="button button-add-fig white" data-letter="P" type="button"> ♙ </button>
+                </div>
+                <div class="figures-palette">
+                    <button class="button button-add-fig black" data-letter="r" type="button"> ♜ </button>
+                    <button class="button button-add-fig black" data-letter="n" type="button"> ♞ </button>
+                    <button class="button button-add-fig black" data-letter="b" type="button"> ♝ </button>
+                    <button class="button button-add-fig black" data-letter="k" type="button"> ♚ </button>
+                    <button class="button button-add-fig black" data-letter="q" type="button"> ♛ </button>
+                    <button class="button button-add-fig black" data-letter="p" type="button"> ♟ </button>
+                </div>
+                <div class="figures-palette">
+                    <button id="button-clear-square" class="button " type="button "> x </button>
+                </div>
+
+            </section>
+            <section>
+                <div class="copy-headline">
+                    <h1> Markers </h1>
+                    <small>(Select a cell ﬁrst to add)</small>
+                </div>
+                <small>@todo</small>
+            </section>
+            <section>
+
+                <h1> Analyse </h1>
+                <h3> Domains </h3>
+
+                <div class="figures-palette">
+                    <button class="button " id="button-paint-domains-w" type="button "> domains w </button>
+                    <button class="button " id="button-paint-domains-b" type="button "> domains b </button>
+                    <button class="button " id="button-paint-domains-wb" type="button "> domains wb </button>
+                </div>
+                <div class="figures-palette">
+                    <button class="button " id="button-hide-domains-wb" type="button "> hide domains wb </button>
+                </div>
+                <div class="figures-palette">
+                    <button class="button " id="button-clear" type="button"> clear board </button>
+                    <button class="button " id="button-init" type="button"> init board </button>
+                </div>
+
+                <h2> Flanks </h2>
+                <small>@todo</small>
+
+            </section>
+            <section>
+                <div class="copy-headline">
+                    <h1> Fen </h1>
+                    <small>@todo</small>
+                </div>
+
+            </section>
         </div>
     </div>
 
 
 
-    <div id="chess " class="chess "></div>
-    <!-- <div id="panel ">
 
-        <div id="panel-figures ">
-            <div>
-                <button class="button button-add-fig " data-letter="r " type="button "> ♜ </button>
-                <button class="button button-add-fig " data-letter="n " type="button "> ♞ </button>
-                <button class="button button-add-fig " data-letter="b " type="button "> ♝ </button>
-                <button class="button button-add-fig " data-letter="k " type="button "> ♚ </button>
-                <button class="button button-add-fig " data-letter="q " type="button "> ♛ </button>
-                <button class="button button-add-fig " data-letter="p " type="button "> ♟ </button>
-            </div>
-            <div>
-                <button class="button button-add-fig " data-letter="R " type="button "> ♖ </button>
-                <button class="button button-add-fig " data-letter="N " type="button "> ♘ </button>
-                <button class="button button-add-fig " data-letter="B " type="button "> ♗ </button>
-                <button class="button button-add-fig " data-letter="K " type="button "> ♔ </button>
-                <button class="button button-add-fig " data-letter="Q " type="button "> ♕ </button>
-                <button class="button button-add-fig " data-letter="P " type="button "> ♙ </button>
-            </div>
-            <div>
-                <button id="button-clear-square " class="button " type="button "> x </button>
-
-            </div>
-        </div>
-        <div id="panel-extras ">
-            <button class="button " id="button-paint-domains-w " type="button "> domains w </button>
-            <button class="button " id="button-paint-domains-b " type="button "> domains b </button>
-            <button class="button " id="button-paint-domains-wb " type="button "> domains wb </button>
-            <button class="button " id="button-hide-domains-wb " type="button "> hide domains wb </button>
-            <button class="button " id="button-clear " type="button "> clear board </button>
-            <button class="button " id="button-init " type="button "> init board </button>
-        </div>
-
-    </div> -->
 </body>
 <html>

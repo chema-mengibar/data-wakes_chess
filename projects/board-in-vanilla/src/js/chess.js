@@ -25,9 +25,13 @@ export default class Chess {
 
         const fenStr = ('fen' in config) ? config.fen : fenBase;
         this.fenToMap(fenStr);
-        this.render();
+        this.render().then(() => {
 
-        this.chessControls = new ChessControls(this.chessActions);
+            this.chessControls = new ChessControls(this.chessActions);
+            this.chessControls.squareControls();
+        });
+
+
     }
 
     get chessActions() {
@@ -78,13 +82,17 @@ export default class Chess {
                 })
             },
             onDomainsHide: async() => {
-
+                this.squaresMap.forEach((_, squareName) => {
+                    const classList = document.getElementById(`base-${squareName}`).classList;
+                    classList.remove('with-domain-white');
+                    classList.remove('with-domain-black');
+                })
             }
         }
     }
 
-    render() {
-        this.drawBoard();
+    async render() {
+        await this.drawBoard();
 
     }
 
@@ -100,7 +108,7 @@ export default class Chess {
         this.squaresMap.set(squareName, Utils.asSquare(letter, color));
     }
 
-    drawBoard() {
+    async drawBoard() {
         const svg = document.getElementById("chess-svg");
         rows.forEach((_, rowIdx) => {
             cols.forEach((_, colIdx) => {
@@ -111,18 +119,18 @@ export default class Chess {
 
         this.drawPiecesFromMap()
 
-        setTimeout(() => {
-            this.chessActions.onDomainB();
-            this.chessActions.onDomainW();
+        // setTimeout(() => {
+        //     this.chessActions.onDomainB();
+        //     this.chessActions.onDomainW();
 
-            Svg.addMarkerRect('d6', true);
-            Svg.addMarkerNotation('d6', 'x');
-            Svg.addMarkerMoveLast('g3');
-            Svg.addMarkerMoveLast('d6');
+        //     Svg.addMarkerRect('d6', true);
+        //     Svg.addMarkerNotation('d6', 'x');
+        //     Svg.addMarkerMoveLast('g3');
+        //     Svg.addMarkerMoveLast('d6');
 
-            Svg.addMarkerCircle('c7');
-            Svg.addMarkerNotation('c7', '10');
-        }, 1000)
+        //     Svg.addMarkerCircle('c7');
+        //     Svg.addMarkerNotation('c7', '10');
+        // }, 1000)
     }
 
     drawPiecesFromMap() {

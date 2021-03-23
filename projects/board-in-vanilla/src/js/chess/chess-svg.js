@@ -13,6 +13,7 @@ function addMarkerCircle(squareName, type = null) {
     const squareNode = document.getElementById(`markers-${squareName}`);
     const use = document.createElementNS("http://www.w3.org/2000/svg", "use");
     use.setAttribute('href', `#marker-circle-${typeMarker}`);
+    use.setAttribute('data-square', `${squareName}`);
     squareNode.appendChild(use);
 }
 
@@ -21,6 +22,7 @@ function addMarkerRect(squareName, type = true) {
     const squareNode = document.getElementById(`markers-${squareName}`);
     const use = document.createElementNS("http://www.w3.org/2000/svg", "use");
     use.setAttribute('href', `#marker-rect-${typeMarker}`);
+    use.setAttribute('data-square', `${squareName}`);
     squareNode.appendChild(use);
 }
 
@@ -28,6 +30,7 @@ function addMarkerMoveLast(squareName) {
     const squareNode = document.getElementById(`markers-${squareName}`);
     const use = document.createElementNS("http://www.w3.org/2000/svg", "use");
     use.setAttribute('href', `#marker-move-last`);
+    use.setAttribute('data-square', `${squareName}`);
     squareNode.appendChild(use);
 }
 
@@ -37,6 +40,7 @@ function addMarkerNotation(squareName, text) {
     textEl.setAttribute('x', '12%');
     textEl.setAttribute('y', '0');
     textEl.setAttribute('dy', '3');
+    textEl.setAttribute('data-square', `${squareName}`);
     textEl.setAttribute('class', 'marker-square-notation');
     textEl.setAttribute('text-anchor', 'end');
     textEl.appendChild(textNode);
@@ -60,9 +64,21 @@ function createSquare(colIdx, rowIdx, asIcon = true) {
 
     const content = `
         <title>${squareName}</title>
-        <rect id="base-${squareName}" class="base" width="12.5%" height="12.5%"  />
-        <g id="markers-${squareName}" class="markers" width="12.5%" height="12.5%"  fill="transparent"/>
-        <text id="piece-${squareName}" class="piece ${ asIcon ? 'asIcon' : ''}" 
+        <rect id="base-${squareName}" 
+            data-square="${squareName}"
+            class="base" 
+            width="12.5%" 
+            height="12.5%"  />
+        <g id="markers-${squareName}" 
+            data-square="${squareName}"
+            class="markers" 
+            width="12.5%" 
+            height="12.5%"  
+            fill="transparent"
+            />
+        <text id="piece-${squareName}" 
+            data-square="${squareName}"
+            class="piece ${ asIcon ? 'asIcon' : ''}" 
             text-anchor="start" 
             x="${xT}" 
             y="${yT}" 
