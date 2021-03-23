@@ -9,6 +9,7 @@ export default class Chess {
     constructor(config) {
         // Init
         this.config = {
+            flip: ('flip' in config) ? config.flip : false,
             asIcon: ('asIcon' in config) ? config.asIcon : true,
             asLines: ('asLines' in config) ? config.asLines : true,
             withLimitation: ('withLimitation' in config) ? config.withLimitation : false,
@@ -37,6 +38,18 @@ export default class Chess {
     get chessActions() {
         const self = this;
         return {
+            onFlip: () => {
+                this.config.flip = !this.config.flip;
+                const squares = document.querySelectorAll(".square");
+                const boardCoordinate = document.querySelectorAll(".board-coordinate");
+                squares.forEach(squareNode => {
+                    squareNode.remove();
+                });
+                boardCoordinate.forEach(squareNode => {
+                    squareNode.remove();
+                })
+                self.render()
+            },
             movePiecesFromSquares: async(originSquare, targetSquare) => {
                 const originPiece = self.squaresMap.get(originSquare);
                 if (originPiece) {
@@ -176,17 +189,21 @@ export default class Chess {
     async drawBoard() {
         const svg = document.getElementById("svg-squares");
         const svgCoordinates = document.getElementById("svg-coordinates");
-        rows.forEach((_, rowIdx) => {
-            cols.forEach((_, colIdx) => {
-                const squareEl = Svg.createSquare(colIdx, rowIdx, this.config.asIcon);
+        const flip = this.config.flip;
+        const flipedRows = flip ? [...rows].reverse() : rows;
+        const flipedCols = flip ? [...cols].reverse() : cols;
+
+        flipedRows.forEach((row, rowIdx) => {
+            flipedCols.forEach((colLetter, colIdx) => {
+                const squareEl = Svg.createSquare(colLetter, colIdx, row, rowIdx, this.config.asIcon);
                 svg.appendChild(squareEl);
             })
         })
 
 
-        this.drawPiecesFromMap()
+        this.drawPiecesFromMap();
 
-        const coordinatesItems = Svg.createCoordinates()
+        const coordinatesItems = Svg.createCoordinates(flipedRows, flipedCols);
         coordinatesItems.forEach(coorItem => {
             svgCoordinates.appendChild(coorItem);
         })

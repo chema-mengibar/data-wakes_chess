@@ -1,4 +1,4 @@
-import { rows, cols, white, } from './chess-const.js'
+import { white, } from './chess-const.js'
 import Utils from './chess-utils.js';
 
 const boardSize = 90;
@@ -51,19 +51,16 @@ function addMarkerNotation(squareName, text) {
 }
 
 
-function createSquare(colIdx, rowIdx, asIcon = true) {
-    const rowInt = 9 - (rowIdx + 1);
+function createSquare(squareLetter, colIdx, rowInt, rowIdx, asIcon = true) {
 
-    const squareLetter = cols[colIdx];
     const squareName = Utils.getCellKey(squareLetter, rowInt);
+
     const x = div * colIdx;
     const y = div * rowIdx;
 
     const xT = asIcon ? 1.5 : 4;
     const yT = asIcon ? -1.5 : 8;
     const dyT = asIcon ? 10 : 0;
-
-    console.log((boardSize / 8))
 
     const content = `
         <title>${squareName}</title>
@@ -98,7 +95,7 @@ function createSquare(colIdx, rowIdx, asIcon = true) {
     squareEl.setAttribute('transform', `translate(${x},${y})`);
 
     squareEl.innerHTML = content;
-    return squareEl
+    return squareEl;
 }
 
 function setPieceInSquare(squareName, pieceLetter = '', color = true) {
@@ -109,12 +106,12 @@ function setPieceInSquare(squareName, pieceLetter = '', color = true) {
     if (color && squareNode.classList.contains(notClassName)) {
         squareNode.classList.remove(notClassName);
     }
-    squareNode.textContent = pieceLetter
+    squareNode.textContent = pieceLetter;
 }
 
-function createCoordinates() {
-    const elements = []
-    cols.forEach((col, idx) => {
+function createCoordinates(flipedRows, flipedCols) {
+    const elements = [];
+    flipedCols.forEach((col, idx) => {
         const textEl = document.createElementNS("http://www.w3.org/2000/svg", "text");
         const textNode = document.createTextNode(col);
         textEl.setAttribute('x', `${div*idx}%`);
@@ -122,14 +119,14 @@ function createCoordinates() {
         textEl.setAttribute('dy', '0');
         textEl.setAttribute('dx', '1');
         textEl.setAttribute('data-coord-col', `${col}`);
-        textEl.setAttribute('class', 'board-coordinate-col');
+        textEl.setAttribute('class', 'board-coordinate board-coordinate-col');
         textEl.setAttribute('text-anchor', 'start');
         textEl.appendChild(textNode);
 
         elements.push(textEl);
     })
 
-    rows.forEach((row, idx) => {
+    flipedRows.forEach((row, idx) => {
         const textEl = document.createElementNS("http://www.w3.org/2000/svg", "text");
         const textNode = document.createTextNode(row);
         textEl.setAttribute('x', '0');
@@ -137,7 +134,7 @@ function createCoordinates() {
         textEl.setAttribute('dy', '6');
         textEl.setAttribute('dx', '-3');
         textEl.setAttribute('data-coord-row', `${row}`);
-        textEl.setAttribute('class', 'board-coordinate-row');
+        textEl.setAttribute('class', 'board-coordinate board-coordinate-row');
         textEl.setAttribute('text-anchor', 'start');
         textEl.appendChild(textNode);
 

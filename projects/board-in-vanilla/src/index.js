@@ -15,7 +15,8 @@ const configA = {
     fen: fens[6],
     asIcon: true,
     asLines: true,
-    withLimitation: true
+    withLimitation: true,
+    flip: true
 }
 
 

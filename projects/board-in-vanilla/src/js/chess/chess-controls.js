@@ -107,6 +107,11 @@ export default class ChessControl {
             self.callBacks.onAttacksSquare(self.buffer.squareTarget);
             self.clearSelectedSquareFromBuffer();
         }, false);
+
+        const buttonFlipBoard = document.getElementById("button-board-flip");
+        buttonFlipBoard.addEventListener('click', function() {
+            self.callBacks.onFlip(self.buffer.squareTarget);
+        }, false);
     }
 
     async setBufferSquareTarget(squareName) {
