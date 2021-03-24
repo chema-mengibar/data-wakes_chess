@@ -12,11 +12,11 @@ const fens = [
 ]
 
 const configA = {
-    fen: fens[6],
+    fen: fens[4],
     asIcon: true,
     asLines: true,
     withLimitation: true,
-    flip: true
+    flip: false
 }
 
 

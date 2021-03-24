@@ -22,158 +22,21 @@ export default class Chess {
         };
 
         // Run
-        this.squaresMap = Utils.createCellsMap(rows, cols);
+        this.squaresMap = Utils.createSquaresMap(rows, cols);
+        this.markersMap = Utils.createMarkersMap(rows, cols);
 
         const fenStr = ('fen' in config) ? config.fen : fenBase;
         this.fenToMap(fenStr);
-        this.render().then(() => {
-
-            this.chessControls = new ChessControls(this.chessActions);
-            this.chessControls.squareControls();
-        });
-
+        this.render();
+        this.chessControls = new ChessControls(this.actionsBridge);
 
     }
 
-    get chessActions() {
-        const self = this;
-        return {
-            onFlip: () => {
-                this.config.flip = !this.config.flip;
-                const squares = document.querySelectorAll(".square");
-                const boardCoordinate = document.querySelectorAll(".board-coordinate");
-                squares.forEach(squareNode => {
-                    squareNode.remove();
-                });
-                boardCoordinate.forEach(squareNode => {
-                    squareNode.remove();
-                })
-                self.render()
-            },
-            movePiecesFromSquares: async(originSquare, targetSquare) => {
-                const originPiece = self.squaresMap.get(originSquare);
-                if (originPiece) {
-                    self.setFigureInSquare(targetSquare, originPiece.letter, originPiece.color);
-                    self.setFigureInSquare(originSquare, null);
-                    self.drawPiecesFromMap();
-                    return true;
-                }
-            },
-            onAdd: (square, letter, color) => {
-                if (!square) { return; }
-                self.setFigureInSquare(square, letter, color);
-                self.drawPiecesFromMap();
-            },
-            onClearSquare: (square) => {
-                if (!square) { return; }
-                self.setFigureInSquare(square, null);
-                self.drawPiecesFromMap();
-            },
-            onClear: () => {
-                self.squaresMap = Utils.createCellsMap(rows, cols);
-                self.drawPiecesFromMap();
-            },
-            onInit: () => {
-                self.fenToMap(fenBase);
-                self.drawPiecesFromMap();
-            },
-            onDomainW: async() => {
-
-                // White domain
-                const squaresInWhiteDomain = []
-                this.squaresMap.forEach((squareEntry, squareName) => {
-                    if (squareEntry && squareEntry.color === white) {
-                        const squaresFromFigure = this.getOptionfromCell(squareName);
-                        squaresInWhiteDomain.push(...squaresFromFigure);
-                    }
-                })
-                squaresInWhiteDomain.forEach(squareName => {
-                    document.getElementById(`base-${squareName}`).classList.add('with-domain-white');
-                })
-            },
-            onDomainB: async() => {
-
-                // Black domain
-                const squaresInBlackDomain = []
-                self.squaresMap.forEach((squareEntry, squareName) => {
-                    if (squareEntry && squareEntry.color === black) {
-                        const squaresFromFigure = this.getOptionfromCell(squareName);
-                        squaresInBlackDomain.push(...squaresFromFigure);
-                    }
-                })
-                squaresInBlackDomain.forEach(squareName => {
-                    document.getElementById(`base-${squareName}`).classList.add('with-domain-black');
-                })
-            },
-            onDomainsHide: async() => {
-                this.squaresMap.forEach((_, squareName) => {
-                    const classList = document.getElementById(`base-${squareName}`).classList;
-                    classList.remove('with-domain-white');
-                    classList.remove('with-domain-black');
-                })
-            },
-            onDomainsSquare: async(squareName) => {
-                const squarePiece = self.squaresMap.get(squareName);
-                if (squarePiece) {
-                    Svg.addMarkerCircle(squareName, squarePiece.color);
-                    const squaresFromFigure = this.getOptionfromCell(squareName);
-                    squaresFromFigure.forEach(domainSquareName => {
-                        const classNameDomain = squarePiece.color ? 'with-domain-white' : 'with-domain-black';
-                        document.getElementById(`base-${domainSquareName}`).classList.add(classNameDomain);
-                    })
-                }
-            },
-            onDomainAttacksSquare: async(squareName) => {
-                const squarePiece = self.squaresMap.get(squareName);
-                if (squarePiece) {
-                    Svg.addMarkerCircle(squareName, squarePiece.color);
-                    const squaresOptionsFromFigure = this.getOptionfromCell(squareName);
-                    squaresOptionsFromFigure.forEach(domainSquareName => {
-                        const classNameDomain = squarePiece.color ? 'with-domain-white' : 'with-domain-black';
-                        document.getElementById(`base-${domainSquareName}`).classList.add(classNameDomain);
-
-                        self.squaresMap.forEach((squareMapValue, squareMapKey) => {
-                            if (squareMapKey !== squareName && squareMapValue && squareMapValue.color !== squarePiece.color) {
-
-                                const squareMapSquareOptions = self.getOptionfromCell(squareMapKey);
-                                console.debug('[CHESS] onDomainAttacksSquare: mapOptions', squareMapSquareOptions);
-                                console.debug('[CHESS] onDomainAttacksSquare: ´fgure', squaresOptionsFromFigure);
-
-                                const uniques = squaresOptionsFromFigure.filter(value => squareMapSquareOptions.includes(value));
-                                uniques.forEach((commonSquare) => {
-                                    Svg.addMarkerCircle(squareMapKey, squareMapValue.color);
-                                    Svg.addMarkerCircle(commonSquare, squareMapValue.color);
-
-                                })
-                            }
-                        })
-                    })
-                }
-            },
-            onAttacksSquare: async(squareName) => {
-                const squarePiece = self.squaresMap.get(squareName);
-                if (squarePiece) {
-                    Svg.addMarkerCircle(squareName, squarePiece.color);
-                    self.squaresMap.forEach((squareMapValue, squareMapKey) => {
-                        if (squareMapKey !== squareName && squareMapValue && squareMapValue.color !== squarePiece.color) {
-                            const squareMapSquareOptions = self.getOptionfromCell(squareMapKey);
-                            console.debug('[CHESS] onDomainAttacksSquare: mapOptions', squareMapSquareOptions);
-                            if (squareMapSquareOptions.includes(squareName)) {
-                                Svg.addMarkerCircle(squareMapKey, squareMapValue.color);
-                                this.chessActions.onDomainsSquare(squareMapKey);
-                            }
-                        }
-                    })
-                }
-            }
-        }
+    lab() {
+        // this.drawSupportToSquareDomain('d4');
     }
 
-    async render() {
-        await this.drawBoard();
-
-    }
-
+    // ----------------------------------------------- Pieces & Board
     fenToMap(fen) {
         if (!fen || fen === '') {
             return
@@ -182,10 +45,56 @@ export default class Chess {
         this.squaresMap = new Map(Object.entries(fenAsObj));
     }
 
+    async render() {
+        this.drawBoard().then(() => {
+            this.chessControls.squareControls();
+
+            this.lab()
+        });
+    }
+
+    flipBoard() {
+        this.config.flip = !this.config.flip;
+        const squares = document.querySelectorAll(".square");
+        const boardCoordinate = document.querySelectorAll(".board-coordinate");
+        squares.forEach(squareNode => {
+            squareNode.remove();
+        });
+        boardCoordinate.forEach(squareNode => {
+            squareNode.remove();
+        })
+        this.render()
+    }
+
+    move(originSquare, targetSquare) {
+        const originPiece = this.squaresMap.get(originSquare);
+        if (originPiece) {
+            this.setFigureInSquare(targetSquare, originPiece.letter, originPiece.color);
+            this.setFigureInSquare(originSquare, null);
+            this.drawPiecesFromMap();
+            return true;
+        }
+    }
+
+    // ----------------------------------------------- Maps
+
     setFigureInSquare(squareName, letter, color = white) {
         this.squaresMap.set(squareName, Utils.asSquare(letter, color));
     }
 
+    addMarkerToSquare(squareName, markerId) {
+        if (!squareName) {
+            return
+        }
+        const squareMarkers = this.markersMap.get(squareName);
+        if (!squareMarkers.includes(markerId)) {
+            squareMarkers.push(markerId);
+            this.markersMap.set(squareName, squareMarkers);
+            this.drawMarkerInSquare(squareName, markerId);
+        }
+    }
+
+    // ----------------------------------------------- Draw: Markers, Pieces
     async drawBoard() {
         const svg = document.getElementById("svg-squares");
         const svgCoordinates = document.getElementById("svg-coordinates");
@@ -209,8 +118,8 @@ export default class Chess {
         })
 
         // setTimeout(() => {
-        //     this.chessActions.onDomainB();
-        //     this.chessActions.onDomainW();
+        //     this.actionsBridge.onDomainB();
+        //     this.actionsBridge.onDomainW();
 
         //     Svg.addMarkerRect('d6', true);
         //     Svg.addMarkerNotation('d6', 'x');
@@ -239,7 +148,45 @@ export default class Chess {
         })
     }
 
-    getOptionfromCell(squareName) {
+    drawMarkersFromMap() {
+        this.markersMap.forEach((markerEntry, squareKey) => {
+            markerEntry.forEach(markerItemId => {
+                this.drawMarkerInSquare(squareKey, markerItemId);
+            })
+        })
+    }
+
+    drawMarkerInSquare(squareName, markerId) {
+        switch (markerId) {
+            case 'marker-circle-white':
+                Svg.addMarkerCircle(squareName, true);
+                break;
+            case 'marker-circle-neutral':
+                Svg.addMarkerCircle(squareName);
+                break;
+            case 'marker-circle-black':
+                Svg.addMarkerCircle(squareName, false);
+                break;
+            case 'marker-move-last':
+                Svg.addMarkerMoveLast(squareName);
+                break;
+            case 'marker-rect-ok':
+                Svg.addMarkerRect(squareName, true);
+                break;
+            case 'marker-rect-error':
+                Svg.addMarkerRect(squareName, false);
+                break;
+            default:
+                break;
+        }
+    }
+
+    getMarkerCircleIdByColor(color) {
+        return color ? 'marker-circle-white' : 'marker-circle-black';
+    }
+
+    // ----------------------------------------------- Engine
+    getSquarePieceAllowedSquares(squareName) {
 
         const limitation = this.config.withLimitation;
 
@@ -282,5 +229,239 @@ export default class Chess {
         return options;
     }
 
+    getDomainClassNameByColor(color) {
+        return color ? 'with-domain-white' : 'with-domain-black';
+    }
+
+    drawDomainByColor(color = white) {
+        const domainClassName = this.getDomainClassNameByColor(color);
+        const squaresInDomain = []
+        this.squaresMap.forEach((squareEntry, squareName) => {
+            if (squareEntry && squareEntry.color === white) {
+                const squaresFromFigure = this.getSquarePieceAllowedSquares(squareName);
+                squaresInDomain.push(...squaresFromFigure);
+            }
+        })
+        squaresInDomain.forEach(squareName => {
+            document.getElementById(`base-${squareName}`).classList.add(domainClassName);
+        })
+    }
+
+    drawDomainBySquare(squareName) {
+        const squarePiece = this.squaresMap.get(squareName);
+        if (squarePiece) {
+            Svg.addMarkerCircle(squareName, squarePiece.color);
+            const squaresFromFigure = this.getSquarePieceAllowedSquares(squareName);
+            squaresFromFigure.forEach(domainSquareName => {
+                const classNameDomain = this.getDomainClassNameByColor(squarePiece.color);
+                document.getElementById(`base-${domainSquareName}`).classList.add(classNameDomain);
+            })
+        }
+    }
+
+    drawClearDomains() {
+        const classNameWhite = this.getDomainClassNameByColor(white);
+        const classNameBlack = this.getDomainClassNameByColor(black);
+        this.squaresMap.forEach((_, squareName) => {
+            const classList = document.getElementById(`base-${squareName}`).classList;
+            classList.remove(classNameWhite);
+            classList.remove(classNameBlack);
+        });
+    }
+
+    drawAttacksToSquare(squareName) {
+        if (!squareName) {
+            return;
+        }
+        let isSquareSave = true;
+        const squarePiece = this.squaresMap.get(squareName);
+        if (squarePiece) {
+            this.squaresMap.forEach((squareMapValue, squareMapKey) => {
+                if (squareMapKey !== squareName && squareMapValue && squareMapValue.color !== squarePiece.color) {
+                    const squareMapSquareOptions = this.getSquarePieceAllowedSquares(squareMapKey);
+                    // console.debug('[CHESS] drawAttacksToSquare: mapOptions', squareMapSquareOptions);
+                    if (squareMapSquareOptions.includes(squareName)) {
+                        isSquareSave = false;
+                        const markerIdByColor = this.getMarkerCircleIdByColor(squareMapValue.color);
+                        this.addMarkerToSquare(squareMapKey, markerIdByColor)
+                        this.drawDomainBySquare(squareMapKey);
+                    }
+                }
+            })
+            if (isSquareSave) {
+                this.addMarkerToSquare(squareName, 'marker-rect-ok');
+            } else {
+                const markerIdBySquareColor = this.getMarkerCircleIdByColor(squarePiece.color);
+                this.addMarkerToSquare(squareName, markerIdBySquareColor);
+            }
+        }
+    }
+
+    drawAttacksToSquareDomain(squareName) {
+        if (!squareName) {
+            return;
+        }
+        let isSquareSave = true;
+        const squarePiece = this.squaresMap.get(squareName);
+        if (squarePiece) {
+
+            const squaresOptionsFromFigure = this.getSquarePieceAllowedSquares(squareName);
+            squaresOptionsFromFigure.forEach(domainSquareName => {
+                const classNameDomain = this.getDomainClassNameByColor(squarePiece.color);
+                document.getElementById(`base-${domainSquareName}`).classList.add(classNameDomain);
+
+                this.squaresMap.forEach((squareMapValue, squareMapKey) => {
+                    if (squareMapKey !== squareName && squareMapValue && squareMapValue.color !== squarePiece.color) {
+                        const squareMapSquareOptions = this.getSquarePieceAllowedSquares(squareMapKey);
+                        // console.debug('[CHESS] drawAttacksToSquareDomain: mapOptions', squareMapSquareOptions);
+                        // console.debug('[CHESS] drawAttacksToSquareDomain: ´fgure', squaresOptionsFromFigure);
+
+                        const uniques = squaresOptionsFromFigure.filter(value => squareMapSquareOptions.includes(value));
+                        uniques.forEach((commonSquare) => {
+                            const markerIdByColor = this.getMarkerCircleIdByColor(squareMapValue.color);
+                            this.addMarkerToSquare(squareMapKey, markerIdByColor);
+                            this.addMarkerToSquare(commonSquare, 'marker-circle-neutral');
+
+                        })
+                        if (uniques.length > 0) {
+                            isSquareSave = false;
+                        }
+                    }
+                })
+            })
+            if (isSquareSave) {
+                this.addMarkerToSquare(squareName, 'marker-rect-ok');
+            } else {
+                const markerIdBySquareColor = this.getMarkerCircleIdByColor(squarePiece.color);
+                this.addMarkerToSquare(squareName, markerIdBySquareColor);
+            }
+        }
+    }
+
+    drawSupportToSquare(squareName) {
+        console.log('[CHESS] drawSupportToSquare:', squareName);
+        if (!squareName) {
+            return;
+        }
+        let isSquareSupported = false;
+        const squarePiece = this.squaresMap.get(squareName);
+        if (squarePiece) {
+            this.squaresMap.forEach((squareMapValue, squareMapKey) => {
+                if (squareMapKey !== squareName && squareMapValue && squareMapValue.color === squarePiece.color) {
+                    const squareMapSquareOptions = this.getSquarePieceAllowedSquares(squareMapKey);
+                    console.debug('[CHESS] drawSupportToSquare: mapOptions', squareMapSquareOptions);
+                    if (squareMapSquareOptions.includes(squareName)) {
+                        isSquareSupported = true;
+                        const markerIdByColor = this.getMarkerCircleIdByColor(squareMapValue.color);
+                        this.addMarkerToSquare(squareMapKey, markerIdByColor)
+                        this.drawDomainBySquare(squareMapKey);
+                    }
+                }
+            })
+            if (isSquareSupported) {
+                this.addMarkerToSquare(squareName, 'marker-rect-ok');
+            } else {
+                this.addMarkerToSquare(squareName, 'marker-rect-error');
+            }
+        }
+    }
+
+    drawSupportToSquareDomain(squareName) {
+        if (!squareName) {
+            return;
+        }
+        let isSquareSupported = false;
+        const squarePiece = this.squaresMap.get(squareName);
+        if (squarePiece) {
+
+            const squaresOptionsFromFigure = this.getSquarePieceAllowedSquares(squareName);
+            squaresOptionsFromFigure.forEach(domainSquareName => {
+                const classNameDomain = this.getDomainClassNameByColor(squarePiece.color);
+                document.getElementById(`base-${domainSquareName}`).classList.add(classNameDomain);
+
+                this.squaresMap.forEach((squareMapValue, squareMapKey) => {
+                    if (squareMapKey !== squareName && squareMapValue && squareMapValue.color === squarePiece.color) {
+                        const squareMapSquareOptions = this.getSquarePieceAllowedSquares(squareMapKey);
+                        // console.debug('[CHESS] drawSupportToSquareDomain: mapOptions', squareMapSquareOptions);
+                        // console.debug('[CHESS] drawSupportToSquareDomain: ´fgure', squaresOptionsFromFigure);
+
+                        const uniques = squaresOptionsFromFigure.filter(value => squareMapSquareOptions.includes(value));
+                        uniques.forEach((commonSquare) => {
+                            const markerIdByColor = this.getMarkerCircleIdByColor(squareMapValue.color);
+                            this.addMarkerToSquare(squareMapKey, markerIdByColor);
+                            this.addMarkerToSquare(commonSquare, 'marker-circle-neutral');
+
+                        })
+                        if (uniques.length > 0) {
+                            isSquareSupported = true;
+                        }
+                    }
+                })
+            })
+            if (isSquareSupported) {
+                this.addMarkerToSquare(squareName, 'marker-rect-ok');
+            } else {
+                this.addMarkerToSquare(squareName, 'marker-rect-error');
+            }
+        }
+    }
+
+    // ----------------------------------------------- Control Actions Bridge
+    get actionsBridge() {
+
+        return {
+            onShowSquareSupport: (squareTarget) => {
+                this.drawSupportToSquare(squareTarget);
+            },
+            onShowSquareDomainSupport: (squareTarget) => {
+                this.drawSupportToSquareDomain(squareTarget);
+            },
+            onFlip: () => {
+                this.flipBoard()
+            },
+            movePiecesFromSquares: async(originSquare, targetSquare) => {
+                this.move(originSquare, targetSquare);
+            },
+            onAddMarker: (squareTarget, markerId) => {
+                this.addMarkerToSquare(squareTarget, markerId);
+            },
+            onAdd: (square, letter, color) => {
+                if (!square) { return; }
+                this.setFigureInSquare(square, letter, color);
+                this.drawPiecesFromMap();
+            },
+            onClearSquare: (square) => {
+                if (!square) { return; }
+                this.setFigureInSquare(square, null);
+                this.drawPiecesFromMap();
+            },
+            onClear: () => {
+                this.squaresMap = Utils.createSquaresMap(rows, cols);
+                this.drawPiecesFromMap();
+            },
+            onInit: () => {
+                this.fenToMap(fenBase);
+                this.drawPiecesFromMap();
+            },
+            onDomainW: async() => {
+                this.drawDomainByColor(white);
+            },
+            onDomainB: async() => {
+                this.drawDomainByColor(black);
+            },
+            onDomainsHide: async() => {
+                this.drawClearDomains();
+            },
+            onDomainsSquare: async(squareName) => {
+                this.drawDomainBySquare(squareName);
+            },
+            onDomainAttacksSquare: async(squareName) => {
+                this.drawAttacksToSquareDomain(squareName);
+            },
+            onAttacksSquare: async(squareName) => {
+                this.drawAttacksToSquare(squareName)
+            }
+        }
+    }
 
 }

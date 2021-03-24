@@ -47,3 +47,14 @@ async printBoardHtml() {
 //         this.chessControls.squareControls();
 //     }
 // )
+
+
+//Markers
+
+const children = document.querySelectorAll(`#markers-${squareTarget} > use`);
+children.forEach(child => {
+    const href = child.getAttribute('href');
+    if (href === `#${markerId}`) {
+        console.log('contains marker');
+    }
+})

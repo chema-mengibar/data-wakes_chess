@@ -13,9 +13,9 @@
             <div class="board">
                 <svg id="chess-svg" width="100%" height="auto" viewBox=" 0 0 100 100" xmlns="http://www.w3.org/2000/svg ">
                     <g id="svg-markers" visibility="hidden">
-                        <circle id="marker-circle-neutral" class="marker-circle-neutral" stroke-dasharray="1" cx="5.6" cy="5.6" r="5" stroke="black" stroke-width=".5"/>
-                        <circle id="marker-circle-black" class="marker-circle-black" stroke-dasharray="1" cx="5.6" cy="5.6" r="5" stroke="black" stroke-width=".5"/>
-                        <circle id="marker-circle-white" class="marker-circle-white" stroke-dasharray="1" cx="5.6" cy="5.6" r="5" stroke="black" stroke-width=".5"/>
+                        <circle id="marker-circle-neutral" class="marker-circle-neutral" stroke-dasharray="1" cx="5.6" cy="5.6" r="5" stroke="black" stroke-width=".5" fill="transparent"/>
+                        <circle id="marker-circle-black" class="marker-circle-black" stroke-dasharray="1" cx="5.6" cy="5.6" r="5" stroke="black" stroke-width=".5" fill="transparent"/>
+                        <circle id="marker-circle-white" class="marker-circle-white" stroke-dasharray="1" cx="5.6" cy="5.6" r="5" stroke="black" stroke-width=".5" fill="transparent"/>
                         <circle id="marker-move-last" class="marker-move-last"  cx="5.6" cy="5.6" r="3.5" fill="black"/>
                         <rect  fill="transparent" x="0.75%" y="0.75%" width="10%"  height="10%" id="marker-rect-ok" class="marker-rect-ok" />
                         <rect  fill="transparent" x="0.75%" y="0.75%" width="10%"  height="10%" id="marker-rect-error" class="marker-rect-error" />
@@ -62,7 +62,38 @@
                     <h1> Markers </h1>
                     <small>(Select a cell ﬁrst to add)</small>
                 </div>
-                <small>@todo</small>
+                <div class="figures-palette">
+                    <button class="button button-marker" type="button" data-marker-id="marker-circle-white">
+                        <svg viewBox="0 0 12 12" height="30px" width="30px" >
+                            <use href="#marker-circle-white" />
+                        </svg>
+                    </button>
+                    <button class="button button-marker" type="button" data-marker-id="marker-circle-neutral">
+                        <svg viewBox="0 0 12 12" height="30px" width="30px" >
+                            <use href="#marker-circle-neutral" />
+                        </svg>
+                    </button>
+                    <button class="button button-marker" type="button" data-marker-id="marker-circle-black">
+                        <svg viewBox="0 0 12 12" height="30px" width="30px" >
+                            <use href="#marker-circle-black" />
+                        </svg>
+                    </button>
+                    <button class="button button-marker" type="button" data-marker-id="marker-move-last">
+                        <svg viewBox="0 0 12 12" height="30px" width="30px" >
+                            <use href="#marker-move-last" />
+                        </svg>
+                    </button>
+                    <button class="button button-marker" type="button" data-marker-id="marker-rect-ok">
+                        <svg viewBox="0 0 .3 .3" height="30px" width="30px" >
+                            <use href="#marker-rect-ok" />
+                        </svg>
+                    </button>
+                    <button class="button button-marker" type="button" data-marker-id="marker-rect-error">
+                        <svg viewBox="0 0 .3 .3" height="30px" width="30px" >
+                            <use href="#marker-rect-error" />
+                        </svg>
+                    </button>
+                </div>
             </section>
             <section>
 
@@ -77,6 +108,10 @@
                     <button class="button " id="button-paint-domains-w" type="button "> domains w </button>
                     <button class="button " id="button-paint-domains-b" type="button "> domains b </button>
                     <button class="button " id="button-paint-domains-wb" type="button "> domains wb </button>
+                </div>
+                <div class="figures-palette">
+                    <button class="button " id="button-paint-support-square" type="button "> square support </button>
+                    <button class="button " id="button-paint-support-square-domain" type="button "> square domain support </button>
                 </div>
                 <div class="figures-palette">
                     <button class="button " id="button-hide-domains-wb" type="button "> hide domains wb </button>

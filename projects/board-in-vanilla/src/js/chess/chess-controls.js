@@ -53,6 +53,16 @@ export default class ChessControl {
             }, false);
         })
 
+
+        document.querySelectorAll('.button-marker').forEach(button => {
+            button.addEventListener('click', function(event) {
+                const targetElement = event.currentTarget;
+                const markerId = targetElement.getAttribute('data-marker-id');
+                self.callBacks.onAddMarker(self.buffer.squareTarget, markerId)
+                self.clearSelectedSquareFromBuffer();
+            }, false);
+        })
+
         const buttonClearSquare = document.getElementById("button-clear-square");
         buttonClearSquare.addEventListener('click', function() {
             self.callBacks.onClearSquare(self.buffer.squareTarget);
@@ -112,6 +122,20 @@ export default class ChessControl {
         buttonFlipBoard.addEventListener('click', function() {
             self.callBacks.onFlip(self.buffer.squareTarget);
         }, false);
+
+        const buttonSquareSupport = document.getElementById("button-paint-support-square");
+        buttonSquareSupport.addEventListener('click', function() {
+            self.callBacks.onShowSquareSupport(self.buffer.squareTarget);
+            self.clearSelectedSquareFromBuffer();
+        }, false);
+
+        const buttonSquareDomainSupport = document.getElementById("button-paint-support-square-domain");
+        buttonSquareDomainSupport.addEventListener('click', function() {
+            self.callBacks.onShowSquareDomainSupport(self.buffer.squareTarget);
+            self.clearSelectedSquareFromBuffer();
+        }, false);
+
+
     }
 
     async setBufferSquareTarget(squareName) {

@@ -138,7 +138,7 @@ onRemove: () => {
     },
     onClear: () => {
         callBacks.onClear();
-        // this.squaresMap = Utils.createCellsMap(rows, cols);
+        // this.squaresMap = Utils.createSquaresMap(rows, cols);
         // self.render();
     },
 

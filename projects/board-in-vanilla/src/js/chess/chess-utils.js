@@ -5,12 +5,23 @@ function getCellKey(colLetter, rowNumber) {
     return `${colLetter}${rowNumber}`;
 }
 
-function createCellsMap(rows, cols) {
+function createSquaresMap(rows, cols) {
     const listCells = [];
     rows.forEach((row) => {
         cols.forEach((col) => {
             const cellKey = getCellKey(col, row);
             listCells.push([cellKey, null]);
+        })
+    })
+    return new Map(listCells);
+}
+
+function createMarkersMap(rows, cols) {
+    const listCells = [];
+    rows.forEach((row) => {
+        cols.forEach((col) => {
+            const cellKey = getCellKey(col, row);
+            listCells.push([cellKey, []]);
         })
     })
     return new Map(listCells);
@@ -74,7 +85,8 @@ function parseFenStrToObject(fen) {
 
 export default {
     getCellKey,
-    createCellsMap,
+    createSquaresMap,
+    createMarkersMap,
     parseFenStrToObject,
     asSquare
 }
