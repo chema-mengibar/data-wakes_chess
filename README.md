@@ -23,6 +23,15 @@ A collection of notebooks to explore and learn chess
 
 ## Install
 
+
+## Usage
+
+1. Install Anaconda and Jupyter
+https://docs.anaconda.com/anaconda/install/
+
+## Tech Stack
+- Python 3
+
 Download stockfish_20090216_x64.exe 
   in .\notebooks\shared\stockfish_12_win_x64
 
