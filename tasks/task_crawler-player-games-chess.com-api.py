@@ -71,7 +71,7 @@ def getPlayerGames(nickname, year, month):
 
 # --------------------------------------------------------
 
-PLAYER = 'elsueco1'
+PLAYER = 'Enjuten'
 
 years = ['2021']
 months = ['01','02','03','04','05','06','07']
