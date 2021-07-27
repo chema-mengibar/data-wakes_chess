@@ -1,0 +1,66 @@
+[Event "sicilian_clasic"]
+[Site ""]
+[Date "????.??.??"]
+[Round "1"]
+[White ""]
+[Black ""]
+[Result "*"]
+[ECO "B60a"]
+
+1.e4 c5 2.Nf3 d6 3.d4 cxd4 4.Nxd4 Nf6 5.Nc3 Nc6 6.Bg5 *
+
+[Event "sicilian_scheveningen"]
+[Site ""]
+[Date "????.??.??"]
+[Round "1"]
+[White ""]
+[Black ""]
+[Result "*"]
+[ECO "B80a"]
+
+1.e4 c5 2.Nf3 d6 3.d4 cxd4 4.Nxd4 Nf6 5.Nc3 e6 *
+
+[Event "sicilian_dragon"]
+[Site ""]
+[Date "????.??.??"]
+[Round "1"]
+[White ""]
+[Black ""]
+[Result "*"]
+[ECO "B70a"]
+
+1.e4 c5 2.Nf3 d6 3.d4 cxd4 4.Nxd4 Nf6 5.Nc3 g6 *
+
+[Event "sicilian_najdorf"]
+[Site ""]
+[Date "????.??.??"]
+[Round "1"]
+[White ""]
+[Black ""]
+[Result "*"]
+[ECO "B90a"]
+
+1.e4 c5 2.Nf3 d6 3.d4 cxd4 4.Nxd4 Nf6 5.Nc3 a6 *
+
+[Event "sicilian_pelikan"]
+[Site ""]
+[Date "????.??.??"]
+[Round "1"]
+[White ""]
+[Black ""]
+[Result "*"]
+[ECO "B33f"]
+
+1.e4 c5 2.Nf3 Nc6 3.d4 cxd4 4.Nxd4 Nf6 5.Nc3 e5 6.Ndb5 d6 *
+
+[Event "sicilian_main"]
+[Site ""]
+[Date "????.??.??"]
+[Round "0"]
+[White ""]
+[Black ""]
+[Result "*"]
+[ECO "B56a"]
+
+1.e4 c5 2.Nf3 d6 3.d4 cxd4 4.Nxd4 Nf6 5.Nc3 *
+
